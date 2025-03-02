@@ -24,22 +24,21 @@ module custom_fifo
 
     //------------------------------------------------------------------------
 
-    logic [pointer_width - 1:0] wr_ptr, rd_ptr;
+    logic [pointer_width - 1:0] rd_ptr;
     logic wr_ptr_odd_circle, rd_ptr_odd_circle;
+    wire [pointer_width - 1:0] wr_ptr;
 
     logic [DEPTH-1:0][WIDTH - 1:0] data;
 
     //------------------------------------------------------------------------
-
+    assign wr_ptr = 'b0;
     always_ff @ (posedge clk or negedge arstn)
         if (!arstn)
         begin
-            wr_ptr <= '0;
             wr_ptr_odd_circle <= 1'b0;
         end
         else if (valid_i)
         begin
-            wr_ptr <= '0;
             wr_ptr_odd_circle <= ~ wr_ptr_odd_circle;
         end
 
