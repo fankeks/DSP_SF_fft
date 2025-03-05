@@ -24,7 +24,7 @@ module uart_tx_writer
     } states;
     states state, next_state;
 
-    always_ff @ (posedge clk or negedge arstn) begin
+    always_ff @ (posedge clk) begin
         if (!arstn)
             state <= READY_TO_LOAD;
         else
@@ -37,7 +37,7 @@ module uart_tx_writer
     logic [3:0] output_bit;
     wire output_stop_bit;
 
-    always_ff @ (posedge clk or negedge arstn) begin
+    always_ff @ (posedge clk) begin
         if (!arstn | (state == READY_TO_LOAD))
             cnt <= scale - 'b1;
         else
@@ -48,7 +48,7 @@ module uart_tx_writer
     end
     assign enable = (cnt == '0);
 
-    always_ff @ (posedge clk or negedge arstn) begin
+    always_ff @ (posedge clk) begin
         if (!arstn | (state == READY_TO_LOAD))
             output_bit <= 'b0;
         else

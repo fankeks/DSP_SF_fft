@@ -103,10 +103,10 @@ module custom_fifo_uart_tx_valid_ready
     wire fifo_full;
 
     assign up_ready   = fifo_empty;
-    assign valid_i    = up_valid & up_ready;
+    wire valid_i    = up_valid & up_ready;
 
     assign down_valid = ~ fifo_empty;
-    assign pop        = down_valid & down_ready;
+    wire pop        = down_valid & down_ready;
 
     custom_fifo_uart_tx
     # (.WIDTH (WIDTH), .DEPTH (DEPTH))

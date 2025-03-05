@@ -2,8 +2,8 @@ import numpy as np
 import os
 
 
-n = 180
-k = 56
+n = 360
+k = 356
 factor = 10000
 
 f = 25000
@@ -54,9 +54,9 @@ print(fft_wave[k] * factor)
 #val = -100
 #print(str(bin(val if val>0 else val+(1<<32)))[2:])
 
-for i in range(n):
-    print("@(posedge clk);")
-    if int(y[i]*1000) < 0:
-        print(f"x       <= -'d{abs(int(y[i]))};")
-    else:
-        print(f"x       <= 'd{abs(int(y[i]))};")
+# for i in range(n):
+#     print("@(posedge clk);")
+#     if int(y[i]*1000) < 0:
+#         print(f"x       <= -'d{abs(int(y[i]))};")
+#     else:
+#         print(f"x       <= 'd{abs(int(y[i]))};")
