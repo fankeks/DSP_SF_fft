@@ -26,6 +26,7 @@ for i in range(n):
     w_re.append(round(np.cos(2 * np.pi * k * i / (n)) * factor))
     w_im.append(round(-np.sin(2 * np.pi * k * i / (n)) * factor))
 
+print(np.max(w_re), np.max(w_im))
 
 with open(os.path.join("weigths", "w_re.txt"), "w") as file:
     for i in range(n):
