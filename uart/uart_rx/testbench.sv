@@ -12,7 +12,7 @@ module test;
   wire valid;
 
   parameter BOADRATE_PARAM = 115200;
-  uart_rx #
+  uart_rx_module #
   (
     .boadrate(BOADRATE_PARAM),
     .DEPTH(DEPTH)

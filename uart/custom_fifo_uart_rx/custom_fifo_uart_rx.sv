@@ -63,7 +63,7 @@ module custom_fifo_uart_rx
 
     always_ff @ (posedge clk)
         if (push)
-            read_data [wr_ptr] <= write_data;
+            read_data [max_ptr - wr_ptr] <= write_data;
 
     //------------------------------------------------------------------------
 

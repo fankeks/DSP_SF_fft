@@ -1,3 +1,3 @@
-VCD info: dumpfile UART_RX.vcd opened for output.
+VCD info: dumpfile UART_TX.vcd opened for output.
 VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
-uart_rx\testbench.sv:202: $finish called at 425320000 (1ps)
+uart_tx\testbench.sv:97: $finish called at 1553770000 (1ps)

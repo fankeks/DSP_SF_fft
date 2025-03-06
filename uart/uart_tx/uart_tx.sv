@@ -97,7 +97,7 @@ module uart_tx_writer
 endmodule
 
 
-module uart_tx
+module uart_tx_module
 # (
     parameter DEPTH = 4,
               clk_mhz = 50,

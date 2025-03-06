@@ -22,7 +22,7 @@ module uart_rx_writer
     } states;
     states state, next_state;
 
-    always_ff @ (posedge clk) begin
+    always_ff @ (posedge clk or negedge arstn) begin
         if (!arstn)
             state <= WAIT;
         else
@@ -36,7 +36,7 @@ module uart_rx_writer
     wire read_stop_bit;
 
     always_ff @ (posedge clk) begin
-        if (!arstn | (state == WAIT))
+        if ((!arstn) | (state == WAIT))
             cnt <= scale - 'b1 + scale / 2;
         else
             if (enable)
@@ -47,7 +47,7 @@ module uart_rx_writer
     assign enable = (cnt == '0);
 
     always_ff @ (posedge clk) begin
-        if (!arstn | (state == WAIT))
+        if ((!arstn) | (state == WAIT))
             read_bit <= '0;
         else
             if (enable)
@@ -83,7 +83,7 @@ module uart_rx_writer
 endmodule
 
 
-module uart_rx
+module uart_rx_module
 # ( parameter clk_mhz = 50,
               boadrate = 9600,
               DEPTH = 4

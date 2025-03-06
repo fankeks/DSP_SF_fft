@@ -15,7 +15,7 @@ module test;
   logic up_ready;
 
   parameter BOADRATE_PARAM = 115200;
-  uart_tx #
+  uart_tx_module #
   (.boadrate(BOADRATE_PARAM),
    .DEPTH(DEPTH)) 
   mrx1 
