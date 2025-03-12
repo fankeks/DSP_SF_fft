@@ -3,12 +3,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def test(ser, y, y_true, k, factor):
+def test(ser, y1, y2, y_true1, y_true2, k, factor):
+    y = y2
+    y_true = y_true2
     fft_wave = np.fft.fft(y)
     cpu_fft = np.array([np.real(fft_wave[k]), np.imag(fft_wave[k])], dtype=np.float64)
 
     for i in range(360):
-        value_out = int(y[i]).to_bytes(4, 'big')
+        value = y1[i]
+        value &= np.uint16(65535)
+        value |= np.uint32(y2[i]) << 16
+        value_out = int(value).to_bytes(4, 'big')
         ser.write(value_out)
 
     fpga_fft = []
@@ -31,6 +36,9 @@ def test(ser, y, y_true, k, factor):
     #print(f'Расчёт на fpga: {fpga_fft}')
     loss = np.abs(fpga_fft - cpu_fft) / np.abs(cpu_fft) * 100
     print(f'Ошибка %: {loss}')
+    # plt.plot(y)
+    # plt.plot(y_true)
+    # plt.show()
     if np.max(loss) >= 1:
         print('BAD')
         plt.plot(y)
@@ -68,14 +76,22 @@ def main():
             print()
         for f in freqs:
             for max_value in M:
-                y = (np.sin(2*np.pi *f * t) + 1) / 2 * max_value
+                y1 = (np.sin(2*np.pi *f * t) + 1) / 2 * max_value
+                y2 = (np.sin(2*np.pi *f * t + 1.5) + 1) / 2 * (max_value - 1)
 
-                n_f = np.random.normal(0, 100, size=1)
-                y_noise = (np.sin(2*np.pi *(f-n_f) * t) + 1) / 2 * max_value
-                noise = np.random.normal(0, 20, size=len(y))
-                y_noise = np.abs(y_noise + noise)
+                n_f1 = np.random.normal(0, 100, size=1)
+                y_noise1 = (np.sin(2*np.pi *(f-n_f1) * t) + 1) / 2 * max_value
+                noise1 = np.random.normal(0, 20, size=len(y1))
+                y_noise1 = np.abs(y_noise1 + noise1)
+                y_noise1 = np.array(y_noise1, dtype=np.int16)
 
-                res = test(ser, y_noise, y, k, factor)
+                n_f2 = np.random.normal(0, 100, size=1)
+                y_noise2 = (np.sin(2*np.pi *(f-n_f2) * t) + 1) / 2 * max_value
+                noise2 = np.random.normal(0, 20, size=len(y1))
+                y_noise2 = np.abs(y_noise2 + noise2)
+                y_noise2 = np.array(y_noise2, dtype=np.int16)
+
+                res = test(ser, y_noise1, y_noise2, y1, y2, k, factor)
                 if res == 'BAD':
                     print('-----------------------------------------------------------')
                     print(f'Freq: {f}')

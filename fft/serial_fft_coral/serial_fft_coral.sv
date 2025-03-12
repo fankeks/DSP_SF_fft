@@ -15,10 +15,13 @@ module serial_fft_coral
     input logic signed [W_WIDTH-1:0] w_im [FRAME_LENGTH-1:0],
 
     input  logic                                       valid_i,
-    input  logic signed [X_WIDTH-1:0]                  x,
+    input  logic signed [X_WIDTH-1:0]                  x1,
+    input  logic signed [X_WIDTH-1:0]                  x2,
     
-    output logic signed [S_WIDTH-1:0]                  re,
-    output logic signed [S_WIDTH-1:0]                  im,
+    output logic signed [S_WIDTH-1:0]                  re1,
+    output logic signed [S_WIDTH-1:0]                  im1,
+    output logic signed [S_WIDTH-1:0]                  re2,
+    output logic signed [S_WIDTH-1:0]                  im2,
     output logic signed                                valid_o
 );
     //------------------------------------------------------------------------
@@ -53,14 +56,14 @@ module serial_fft_coral
 
     // RE
 
-    logic signed [S_WIDTH-1:0] psumm_i_re;
-    logic                valid_psumm_i_re;
+    logic signed [S_WIDTH-1:0] psumm_i_re1;
+    logic                valid_psumm_i_re1;
 
-    logic signed [S_WIDTH-1:0] psumm_o_re;
-    logic                 valid_psumm_o_re;
+    logic signed [S_WIDTH-1:0] psumm_o_re1;
+    logic                 valid_psumm_o_re1;
 
-    assign psumm_i_re       = (counter == 0) ? 'b0 : psumm_o_re;
-    assign valid_psumm_i_re = 'b1;
+    assign psumm_i_re1       = (counter == 0) ? 'b0 : psumm_o_re1;
+    assign valid_psumm_i_re1 = 'b1;
 
     logic signed [W_WIDTH-1:0] weight_re;
     assign weight_re = w_re[counter];
@@ -70,35 +73,35 @@ module serial_fft_coral
         .X_WIDTH  (X_WIDTH),
         .SI_WIDTH (S_WIDTH),
         .SO_WIDTH (S_WIDTH)
-    ) re_node (
+    ) re_node1 (
         .clk           (clk),
         .arstn         (arstn),
         .enable        (valid_i),
         .weight_i      (weight_re),
 
-        .psumm_i       (psumm_i_re),
-        .valid_psumm_i (valid_psumm_i_re),
+        .psumm_i       (psumm_i_re1),
+        .valid_psumm_i (valid_psumm_i_re1),
 
-        .x_i           (x),
+        .x_i           (x1),
         .valid_x_i     (valid_i),
 
-        .psumm_o       (psumm_o_re),
-        .valid_o       (valid_psumm_o_re)
+        .psumm_o       (psumm_o_re1),
+        .valid_o       (valid_psumm_o_re1)
     );
-    assign re = psumm_o_re;
+    assign re1 = psumm_o_re1;
 
     //------------------------------------------------------------------------
 
     // IM
 
-    logic signed [S_WIDTH-1:0] psumm_i_im;
-    logic                valid_psumm_i_im;
+    logic signed [S_WIDTH-1:0] psumm_i_im1;
+    logic                valid_psumm_i_im1;
 
-    logic signed [S_WIDTH-1:0] psumm_o_im;
-    logic                 valid_psumm_o_im;
+    logic signed [S_WIDTH-1:0] psumm_o_im1;
+    logic                 valid_psumm_o_im1;
 
-    assign psumm_i_im       = (counter == 0) ? 'b0 : psumm_o_im;
-    assign valid_psumm_i_im = 'b1;
+    assign psumm_i_im1       = (counter == 0) ? 'b0 : psumm_o_im1;
+    assign valid_psumm_i_im1 = 'b1;
 
     logic signed [W_WIDTH-1:0] weight_im;
     assign weight_im = w_im[counter];
@@ -108,21 +111,93 @@ module serial_fft_coral
         .X_WIDTH  (X_WIDTH),
         .SI_WIDTH (S_WIDTH),
         .SO_WIDTH (S_WIDTH)
-    ) im_node (
+    ) im_node1 (
         .clk           (clk),
         .arstn         (arstn),
         .enable        (valid_i),
         .weight_i      (weight_im),
 
-        .psumm_i       (psumm_i_im),
-        .valid_psumm_i (valid_psumm_i_im),
+        .psumm_i       (psumm_i_im1),
+        .valid_psumm_i (valid_psumm_i_im1),
 
-        .x_i           (x),
+        .x_i           (x1),
         .valid_x_i     (valid_i),
 
-        .psumm_o       (psumm_o_im),
-        .valid_o       (valid_psumm_o_im)
+        .psumm_o       (psumm_o_im1),
+        .valid_o       (valid_psumm_o_im1)
     );
-    assign im = psumm_o_im;
+    assign im1 = psumm_o_im1;
+
+    //------------------------------------------------------------------------
+
+    // RE
+
+    logic signed [S_WIDTH-1:0] psumm_i_re2;
+    logic                valid_psumm_i_re2;
+
+    logic signed [S_WIDTH-1:0] psumm_o_re2;
+    logic                 valid_psumm_o_re2;
+
+    assign psumm_i_re2       = (counter == 0) ? 'b0 : psumm_o_re2;
+    assign valid_psumm_i_re2 = 'b1;
+
+    syst_node #(
+        .W_WIDTH  (W_WIDTH),
+        .X_WIDTH  (X_WIDTH),
+        .SI_WIDTH (S_WIDTH),
+        .SO_WIDTH (S_WIDTH)
+    ) re_node2 (
+        .clk           (clk),
+        .arstn         (arstn),
+        .enable        (valid_i),
+        .weight_i      (weight_re),
+
+        .psumm_i       (psumm_i_re2),
+        .valid_psumm_i (valid_psumm_i_re2),
+
+        .x_i           (x2),
+        .valid_x_i     (valid_i),
+
+        .psumm_o       (psumm_o_re2),
+        .valid_o       (valid_psumm_o_re2)
+    );
+    assign re2 = psumm_o_re2;
+
+    //------------------------------------------------------------------------
+
+    // IM
+
+    logic signed [S_WIDTH-1:0] psumm_i_im2;
+    logic                valid_psumm_i_im2;
+
+    logic signed [S_WIDTH-1:0] psumm_o_im2;
+    logic                 valid_psumm_o_im2;
+
+    assign psumm_i_im2       = (counter == 0) ? 'b0 : psumm_o_im2;
+    assign valid_psumm_i_im2 = 'b1;
+
+    syst_node #(
+        .W_WIDTH  (W_WIDTH),
+        .X_WIDTH  (X_WIDTH),
+        .SI_WIDTH (S_WIDTH),
+        .SO_WIDTH (S_WIDTH)
+    ) im_node2 (
+        .clk           (clk),
+        .arstn         (arstn),
+        .enable        (valid_i),
+        .weight_i      (weight_im),
+
+        .psumm_i       (psumm_i_im2),
+        .valid_psumm_i (valid_psumm_i_im2),
+
+        .x_i           (x2),
+        .valid_x_i     (valid_i),
+
+        .psumm_o       (psumm_o_im2),
+        .valid_o       (valid_psumm_o_im2)
+    );
+    assign im2 = psumm_o_im2;
+
+    
 
 endmodule
