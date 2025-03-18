@@ -1,3 +1,3 @@
-VCD info: dumpfile UART_TX.vcd opened for output.
+VCD info: dumpfile fifo_multi.vcd opened for output.
 VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
-uart_tx\testbench.sv:97: $finish called at 1553770000 (1ps)
+multi_push_multi_pop_fifo\testbench.sv:108: $finish called at 610000 (1ps)
