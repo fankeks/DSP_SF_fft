@@ -3,9 +3,9 @@
 module testbench;
     // Подключение
     localparam W = 8;
-    localparam D = 4;
+    localparam D = 9;
     localparam N = 4;
-    localparam WN = $clog2(N + 1);
+    localparam WN = $clog2(N + 1) + 1;
 
     logic                clk;
     logic                rst;

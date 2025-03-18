@@ -1,5 +1,5 @@
 $date
-	Tue Mar 18 15:03:52 2025
+	Tue Mar 18 17:13:36 2025
 $end
 $version
 	Icarus Verilog
@@ -9,26 +9,26 @@ $timescale
 $end
 $scope module testbench $end
 $var wire 32 ! pop_data [31:0] $end
-$var wire 3 " can_push [2:0] $end
-$var wire 3 # can_pop [2:0] $end
+$var wire 4 " can_push [3:0] $end
+$var wire 4 # can_pop [3:0] $end
 $var reg 1 $ clk $end
-$var reg 3 % pop [2:0] $end
-$var reg 3 & push [2:0] $end
+$var reg 4 % pop [3:0] $end
+$var reg 4 & push [3:0] $end
 $var reg 32 ' push_data [31:0] $end
 $var reg 1 ( rst $end
 $scope module node $end
 $var wire 1 $ clk $end
-$var wire 3 ) pop [2:0] $end
-$var wire 3 * push [2:0] $end
+$var wire 4 ) pop [3:0] $end
+$var wire 4 * push [3:0] $end
 $var wire 32 + push_data [31:0] $end
 $var wire 1 ( rst $end
-$var wire 3 , can_push [2:0] $end
-$var wire 3 - can_pop [2:0] $end
-$var reg 32 . data [31:0] $end
+$var wire 4 , can_push [3:0] $end
+$var wire 4 - can_pop [3:0] $end
+$var reg 72 . data [71:0] $end
 $var reg 32 / pop_data [31:0] $end
-$var reg 3 0 rd_ptr [2:0] $end
+$var reg 4 0 rd_ptr [3:0] $end
 $var reg 1 1 rd_ptr_odd_circle $end
-$var reg 3 2 wr_ptr [2:0] $end
+$var reg 4 2 wr_ptr [3:0] $end
 $var reg 1 3 wr_ptr_odd_circle $end
 $scope begin $ivl_for_loop0 $end
 $var integer 32 4 i [31:0] $end
@@ -50,7 +50,7 @@ b0 0
 bx /
 bx .
 b0 -
-b100 ,
+b1001 ,
 bx +
 bx *
 b0 )
@@ -60,7 +60,7 @@ bx &
 b0 %
 0$
 b0 #
-b100 "
+b1001 "
 bx !
 $end
 #10000
@@ -85,8 +85,8 @@ b11 *
 #80000
 0$
 #90000
-b1 "
-b1 ,
+b110 "
+b110 ,
 b11 #
 b11 -
 bx000000110000001000000001 !
@@ -103,36 +103,36 @@ b100 4
 #100000
 0$
 #110000
-b10 "
-b10 ,
+b111 "
+b111 ,
 b10 #
 b10 -
-b1xxxxxxxx0000001100000010 !
-b1xxxxxxxx0000001100000010 /
+bx0000001100000010 !
+bx0000001100000010 /
 b100 5
 b1 0
 1$
 #120000
 0$
 #130000
-b11 "
-b11 ,
+b1000 "
+b1000 ,
 b1 #
 b1 -
-b1000000001xxxxxxxx00000011 !
-b1000000001xxxxxxxx00000011 /
+bx00000011 !
+bx00000011 /
 b100 5
 b10 0
 1$
 #140000
 0$
 #150000
-b100 "
-b100 ,
+b1001 "
+b1001 ,
 b0 #
 b0 -
-b110000001000000001xxxxxxxx !
-b110000001000000001xxxxxxxx /
+bx !
+bx /
 b100 5
 b0 %
 b0 )
@@ -149,36 +149,34 @@ b11 *
 #180000
 0$
 #190000
-b1 "
-b1 ,
+b110 "
+b110 ,
 b11 #
 b11 -
-b11000010000000011100000110 !
-b11000010000000011100000110 /
+bx000010000000011100000110 !
+bx000010000000011100000110 /
 b100 5
-b110000000110000100000000111 .
+bx000010000000011100000110000000110000001000000001 .
 b10 %
 b10 )
 b0 &
 b0 *
-13
-b10 2
+b110 2
 b100 4
 1$
 #200000
 0$
 #210000
-b11 "
-b11 ,
+b1000 "
+b1000 ,
 b1 #
 b1 -
-b111000001100000001100001000 !
-b111000001100000001100001000 /
+bx00001000 !
+bx00001000 /
 b100 5
 b0 %
 b0 )
-11
-b1 0
+b101 0
 1$
 #220000
 0$

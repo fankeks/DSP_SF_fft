@@ -2,7 +2,7 @@ module multi_push_multi_pop_fifo #(
     parameter W = 16,
     parameter D = 16,
     parameter N = 2,   // max push / pop
-    localparam WN = $clog2(N + 1)
+    localparam WN = $clog2(N + 1) + 1
 ) (
     input  logic                         clk,
     input  logic                         rst,
@@ -19,8 +19,8 @@ module multi_push_multi_pop_fifo #(
 
     //------------------------------------------------------------------------
 
-    localparam pointer_width = $clog2 (D) + 1,
-                          counter_width = $clog2 (D + 1) + 1;
+    localparam pointer_width = $clog2 (D),
+                          counter_width = $clog2 (D + 1);
 
     localparam [counter_width - 1:0] max_ptr = counter_width' (D - 1);
 
