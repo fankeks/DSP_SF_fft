@@ -2,7 +2,7 @@ module multi_push_multi_pop_fifo #(
     parameter W = 16,
     parameter D = 16,
     parameter N = 2,   // max push / pop
-    localparam WN = $clog2(N + 1) + 1
+    localparam WN = $clog2(N + 1)
 ) (
     input  logic                         clk,
     input  logic                         rst,
@@ -93,7 +93,12 @@ module multi_push_multi_pop_fifo #(
     end
 
     // // can_push / can_pop
-    assign can_push = (rd_ptr_odd_circle == wr_ptr_odd_circle) ? D - (wr_ptr - rd_ptr) : (rd_ptr - wr_ptr);
-    assign can_pop  = (rd_ptr_odd_circle == wr_ptr_odd_circle) ? wr_ptr - rd_ptr : D - (rd_ptr - wr_ptr);
+    wire [counter_width - 1:0] c_push;
+    assign c_push = (rd_ptr_odd_circle == wr_ptr_odd_circle) ? D - (wr_ptr - rd_ptr) : (rd_ptr - wr_ptr);
+    assign can_push = (c_push > N) ? N : c_push;
+
+    wire [counter_width - 1:0] c_pop;
+    assign c_pop = (rd_ptr_odd_circle == wr_ptr_odd_circle) ? wr_ptr - rd_ptr : D - (rd_ptr - wr_ptr);
+    assign can_pop = (c_pop > N) ? N : c_pop;
     
 endmodule
