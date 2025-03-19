@@ -1,4 +1,4 @@
-`include "custom_fifo_uart_tx/custom_fifo_uart_tx_valid_ready.sv"
+`include "multi_push_multi_pop_fifo/multi_push_multi_pop_fifo.sv"
 
 module uart_tx_writer
 # ( parameter clk_mhz = 50,
@@ -100,38 +100,49 @@ endmodule
 module uart_tx_module
 # (
     parameter DEPTH = 4,
+              N = 4,
               clk_mhz = 50,
               boadrate = 9600
 )
 (
-    input                         clk,
-    input                         arstn,
+    input                                clk,
+    input                                arstn,
 
-    input                         up_valid,    // upstream
-    output                        up_ready,
-    input  logic [DEPTH-1:0][7:0] data_i,  // Эллементы буфера
+    input  logic [$clog2(N + 1) - 1 : 0] push,        // Количество эллементов, которые запишутся в буфер
+    output logic [$clog2(N + 1) - 1 : 0] can_push,    // Количество мест в буфере
+    input  logic [N - 1 : 0][7:0]        data_i,      // Эллементы для записи
 
     output logic tx
 );
+    // up_interface
+    wire [$clog2(N + 1) - 1 : 0] push_uart;
+    assign push_uart = (push > can_push) ? 0 : push;
 
-    logic       down_valid;  // downstream
-    logic       down_ready;
-    logic [7:0] down_data;
+    // down_interface
+    logic  down_valid;
 
-    custom_fifo_uart_tx_valid_ready #(
-        .WIDTH  (8),
-        .DEPTH  (DEPTH)
-    ) fifo (
-        .clk           (clk   ),
-        .arstn         (arstn ),
+    logic [7 : 0] down_data;
 
-        .up_valid      (up_valid),
-        .up_ready      (up_ready),
-        .data_i        (data_i ),
+    logic down_ready;
+    wire  pop = down_valid & down_ready;
 
-        .down_valid    (down_valid),
-        .down_ready    (down_ready),
-        .down_data     (down_data)
+    multi_push_multi_pop_fifo #(
+    .W (8),    // UART
+    .D (DEPTH),
+    .NO (1),   // max pop
+    .NI (N)    // max push
+    ) buffer (
+        .clk(clk),
+        .rst(~arstn),
+
+        .push(push_uart),
+        .push_data(data_i),
+
+        .pop(pop),
+        .pop_data(down_data),
+
+        .can_push(can_push),
+        .can_pop(down_valid)
     );
 
     uart_tx_writer #(

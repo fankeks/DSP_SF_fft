@@ -20,9 +20,10 @@ module testbench;
     logic [WN - 1 : 0] can_pop;
 
     multi_push_multi_pop_fifo #(
-    .W (W),
-    .D (D),
-    .N (N)   // max push / pop
+    .W  (W),
+    .D  (D),
+    .NI (N),
+    .NO (N)   // max push / pop
     ) node (
         .clk(clk),
         .rst(rst),
