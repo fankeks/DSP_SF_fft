@@ -1,4 +1,4 @@
-`include "custom_fifo_uart_rx/custom_fifo_uart_rx.sv"
+`include "multi_push_multi_pop_fifo/multi_push_multi_pop_fifo.sv"
 
 
 module uart_rx_writer
@@ -86,18 +86,20 @@ endmodule
 module uart_rx_module
 # ( parameter clk_mhz = 50,
               boadrate = 9600,
-              DEPTH = 4
+              DEPTH = 4,
+              N = 4
 )
 (
     input clk,
     input arstn,
     input rx,
 
-    output logic [DEPTH - 1:0][7:0] data,
-    output logic valid
+    output logic [N - 1:0][7:0]          data,
+    input logic [$clog2(N + 1) - 1 : 0]  pop,
+    output logic [$clog2(N + 1) - 1 : 0] can_pop
 );
-    wire valid_w;
-    wire [7:0] data_w;
+    wire uart_valid;
+    wire [7:0] uart_data;
     uart_rx_writer#
     (
         .clk_mhz(clk_mhz),
@@ -108,24 +110,36 @@ module uart_rx_module
         .arstn(arstn),
         .rx(rx),
 
-        .valid(valid_w),
-        .data(data_w)
+        .valid(uart_valid),
+        .data(uart_data)
     );
 
-    custom_fifo_uart_rx #
-    (
-        .DEPTH(DEPTH),
-        .WIDTH(8)
-    ) fifo
-    (
+    // up_stream
+    wire can_push;
+    wire push;
+    assign push = uart_valid & (|can_push);
+
+    // down_stream
+    wire [$clog2(N + 1) - 1 : 0] pop_buffer;
+    assign pop_buffer = (pop > can_pop) ? 'b0 : pop;
+
+    multi_push_multi_pop_fifo #(
+    .W (8),    // UART
+    .D (DEPTH),
+    .NO (N),   // max pop
+    .NI (1)    // max push
+    ) buffer (
         .clk(clk),
-        .arstn(arstn),
+        .rst(~arstn),
 
-        .push(valid_w),
-        .write_data(data_w),
+        .push(push),
+        .push_data(uart_data),
 
-        .valid_o(valid),
-        .read_data(data)
+        .pop(pop_buffer),
+        .pop_data(data),
+
+        .can_push(can_push),
+        .can_pop(can_pop)
     );
 
 endmodule

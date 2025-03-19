@@ -116,7 +116,7 @@ module uart_tx_module
 );
     // up_interface
     wire [$clog2(N + 1) - 1 : 0] push_uart;
-    assign push_uart = (push > can_push) ? 0 : push;
+    assign push_uart = (push > can_push) ? 'b0 : push;
 
     // down_interface
     logic  down_valid;

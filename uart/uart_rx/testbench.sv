@@ -4,25 +4,32 @@
 module test;
   // Подключение
   localparam DEPTH = 4;
+  localparam N = 4;
+
   logic clk;
   logic clk_baud;
   logic arstn;
   logic rx;
-  wire [DEPTH - 1:0][7:0] data;
-  wire valid;
+
+  logic [N - 1:0][7:0] data;
+  logic [$clog2(N + 1) - 1 : 0] pop;
+  logic [$clog2(N + 1) - 1 : 0] can_pop;
 
   parameter BOADRATE_PARAM = 115200;
   uart_rx_module #
   (
     .boadrate(BOADRATE_PARAM),
-    .DEPTH(DEPTH)
+    .DEPTH(DEPTH),
+    .N (N)
   ) mrx1 
   (
     .clk(clk), 
     .arstn(arstn), 
     .rx(rx), 
+
     .data(data), 
-    .valid(valid)
+    .pop(pop),
+    .can_pop(can_pop)
   );
 
   initial begin
@@ -59,6 +66,7 @@ module test;
   initial begin
     rx <= 1;
     wait(!arstn);
+    pop <= 'd4;
     @(posedge clk_baud);
     @(posedge clk_baud);
     @(posedge clk_baud);
