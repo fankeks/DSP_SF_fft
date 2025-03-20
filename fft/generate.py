@@ -4,7 +4,7 @@ import os
 
 n = 360
 k = 356
-factor = 1000
+factor = 1024
 
 f = 25000
 #fs is sampling frequency
@@ -58,6 +58,6 @@ print(fft_wave[k] * factor)
 # for i in range(n):
 #     print("@(posedge clk);")
 #     if int(y[i]*1000) < 0:
-#         print(f"x       <= -'d{abs(int(y[i]))};")
+#         print(f"x1       <= -'d{abs(int(y[i]))};")
 #     else:
-#         print(f"x       <= 'd{abs(int(y[i]))};")
+#         print(f"x1       <= 'd{abs(int(y[i]))};")

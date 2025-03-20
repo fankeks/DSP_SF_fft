@@ -4,8 +4,8 @@ import numpy as np
 
 
 def test(ser, y1, y2, y_true1, y_true2, k, factor):
-    y = y2
-    y_true = y_true2
+    y = y1
+    y_true = y_true1
     fft_wave = np.fft.fft(y)
     cpu_fft = np.array([np.real(fft_wave[k]), np.imag(fft_wave[k])], dtype=np.float64)
 
@@ -63,7 +63,7 @@ def main():
 
     n = 360
     k = 356
-    factor = 1000
+    factor = 1024
     #fs is sampling frequency
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
