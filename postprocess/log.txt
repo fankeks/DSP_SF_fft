@@ -1,0 +1,3 @@
+VCD info: dumpfile syst_node.vcd opened for output.
+VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
+dec_to_polar\testbench.sv:73: $finish called at 530000 (1ps)
