@@ -59,10 +59,70 @@ module test;
     //---------------------------------------------------------------------------------------------
         @(posedge clk);
         i_vld <= 'b1;
-        i_xval <= 32'd1572864;
-        i_yval <= 32'd1638400;
+        i_xval <= 32'd1 << 'd10;
+        i_yval <= 32'd1 << 'd10;
+        $display("%d", 32'd1);
+        $display("%d", 32'd1);
+
         @(posedge clk);
-        i_vld <= 'b0;
+        i_vld <= 'b1;
+        i_xval <= 32'd5 << 'd10;
+        i_yval <= 32'd1 << 'd10;
+        $display("%d", 32'd5);
+        $display("%d", 32'd1);
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= 32'd1 << 'd10;
+        i_yval <= 32'd5 << 'd10;
+        $display("%d", 32'd1);
+        $display("%d", 32'd5);
+
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= -32'd5 << 'd10;
+        i_yval <= 32'd1 << 'd10;
+        $display("-%d", 32'd5);
+        $display("%d", 32'd1);
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= -32'd1 << 'd10;
+        i_yval <= 32'd5 << 'd10;
+        $display("-%d", 32'd1);
+        $display("%d", 32'd5);
+
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= -32'd5 << 'd10;
+        i_yval <= -32'd1 << 'd10;
+        $display("-%d", 32'd5);
+        $display("-%d", 32'd1);
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= -32'd1 << 'd10;
+        i_yval <= -32'd5 << 'd10;
+        $display("-%d", 32'd1);
+        $display("-%d", 32'd5);
+
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= 32'd5 << 'd10;
+        i_yval <= -32'd1 << 'd10;
+        $display("%d", 32'd5);
+        $display("-%d", 32'd1);
+        @(posedge clk);
+        i_vld <= 'b1;
+        i_xval <= 32'd1 << 'd10;
+        i_yval <= -32'd5 << 'd10;
+        $display("%d", 32'd1);
+        $display("-%d", 32'd5);
+
+        @(posedge o_vld);
+        $display("RESULTS");
+        repeat(9) begin
+            @(posedge clk);
+            $display("%d", o_phase);
+        end
+
     //---------------------------------------------------------------------------------------------
         repeat(18) begin
             @(posedge clk);
@@ -72,36 +132,4 @@ module test;
         @(posedge clk);
         $finish;
     end
-    
-    // Проверка
-    // initial begin
-    //     wait(~arstn);
-    //     @(posedge clk);
-    //     @(posedge clk);
-    // //---------------------------------------------------------------------------------------------
-    //     repeat (32)
-    //     begin
-    //         @(posedge clk);
-    //         if ($signed(psumm_o) != ($signed(psumm_i) + $signed(weight_i) * $signed(x_i) )) begin
-    //             $display($signed(psumm_o));
-    //             $display(($signed(psumm_i) + $signed(weight_i) * $signed(x_i)));
-    //             $display($signed(psumm_i));
-    //             $display($signed(weight_i));
-    //             $display($signed(x_i));
-    //             $error("BAD");
-    //         end
-    //         else begin
-    //             $display("PASS");
-    //             // $display($signed(psumm_o));
-    //             // $display($signed(psumm_i));
-    //             // $display($signed(weight_i));
-    //             // $display($signed(x_i));
-    //         end
-    //     end
-    // //---------------------------------------------------------------------------------------------
-    //     @(posedge clk);
-    //     @(posedge clk);
-    //     @(posedge clk);
-    //     $finish;
-    // end
 endmodule
