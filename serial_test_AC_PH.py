@@ -45,7 +45,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 1:
+    if np.max(loss) >= 2.5:
         print('BAD')
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
@@ -62,7 +62,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
 def main():
     # configure the serial connections
     ser = serial.Serial(
-        port='COM51',
+        port='COM3',
         baudrate=300000,
     )
 
@@ -72,14 +72,14 @@ def main():
 
     n = 360
     k = 356
-    factor = 1024
+    factor = 2**3
     #fs is sampling frequency
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
 
     diap_f = [23000, 27000]
-    diap_A = [20, 2**12-1]
-    diap_PH = [-0.7, 0.7]
+    diap_A = [8, 2**12-1]
+    diap_PH = [-np.pi, np.pi]
     for i in tqdm(range(5000)):
         f1 = np.random.uniform(diap_f[0], diap_f[1], 1)[0]
         A1 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]

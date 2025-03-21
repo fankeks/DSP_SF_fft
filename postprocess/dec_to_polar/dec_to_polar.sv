@@ -68,7 +68,7 @@ module	topolar
 						ys[0]  <= i_x - i_y;
 						phs[0] <= 32'hda4d_0702;    //225 - 360
 					end
-					2'b01:begin
+					2'b10:begin
 						xs[0]  <= i_x - i_y;
 						ys[0]  <= i_x + i_y;
 						phs[0] <= 32'hf36f_0256;    //315 - 360
