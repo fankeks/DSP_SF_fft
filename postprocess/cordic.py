@@ -35,22 +35,27 @@ def dec_to_pol(x, y):
     print([str(hex(np.int32(float_to_fix(table[i], 30))))[2:] for i in range(len(table))])
 
     for i in range(N):
-        print(i, phase_iter[i], y_iter[i])
-        if(y_iter[i] > 0):
+        if(y_iter[i] >= 0):
             x_iter[i+1] = x_iter[i] + (y_iter[i] / (2 ** (i+1)))
             y_iter[i+1] = y_iter[i] - (x_iter[i] / (2 ** (i+1)))
             phase_iter[i+1] = phase_iter[i] + table[i]
+            print('+')
+            print(i, hex(np.uint32(float_to_fix(x_iter[i], 16))), hex(np.uint32(float_to_fix(y_iter[i], 16))))
+            print(i, hex(np.uint32(float_to_fix(x_iter[i] / (2 ** (i+1)), 16))), hex(np.uint32(float_to_fix(y_iter[i] / (2 ** (i+1)), 16))))
         else:
             x_iter[i+1] = x_iter[i] - (y_iter[i] / (2 ** (i+1)))
             y_iter[i+1] = y_iter[i] + (x_iter[i] / (2 ** (i+1)))
             phase_iter[i+1] = phase_iter[i] - table[i]
+            print('-')
+            print(i, hex(np.uint32(float_to_fix(x_iter[i], 16))), hex(np.uint32(float_to_fix(y_iter[i], 16))))
+            print(i, hex(np.uint32(float_to_fix(x_iter[i] / (2 ** (i+1)), 16))), hex(np.uint32(float_to_fix(y_iter[i] / (2 ** (i+1)), 16))))
     #print(phase_iter)
     return x_iter[-1], phase_iter[-1]
 
 
 if __name__ == '__main__':
     x = 1
-    y = 5
+    y = 1
 
     print(45)
     print(str(hex(float_to_fix(45 / 180 * np.pi, 30)))[2:])

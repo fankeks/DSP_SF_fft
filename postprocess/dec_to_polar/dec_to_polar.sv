@@ -37,10 +37,10 @@ module	topolar
 	//assign	cordic_angle[16] = 32'h0000_1fff; //   0.000437 deg
 	//assign	cordic_angle[17] = 32'h0000_0fff; //   0.000219 deg
 
-	logic	signed [NSTAGES:0] [31:0]	xs;
-	logic	signed [NSTAGES:0] [31:0]	ys;
-	logic	signed [NSTAGES:0] [31:0]	phs;
-	logic          [NSTAGES:0]          valids;
+	logic	signed [NSTAGES:0] [WIDTH-1:0]	xs;
+	logic	signed [NSTAGES:0] [WIDTH-1:0]	ys;
+	logic	signed [NSTAGES:0] [WIDTH-1:0]	phs;
+	logic          [NSTAGES:0]              valids;
     
 	// Предварительный поворот в сектор -45 45
 	always_ff @(posedge clk) begin
@@ -48,7 +48,7 @@ module	topolar
 		else begin
 			valids[0] <= i_vld;
 			if (i_vld) begin
-				case ({i_y[31], i_x[31]} )
+				case ({i_y[WIDTH-1], i_x[WIDTH-1]} )
 					2'b00:begin
 						xs[0]  <= i_x + i_y;
 						ys[0]  <= i_y - i_x;
@@ -92,14 +92,14 @@ module	topolar
 		else begin
 			valids[i+1] <= valids[i];
 			if (valids[i]) begin
-				if (~ys[i][31]) begin
-					xs[i+1] <= xs[i] + (ys[i]>>>(i+1));
-					ys[i+1] <= ys[i] - (xs[i]>>>(i+1));
+				if (~ys[i][WIDTH-1]) begin
+					xs[i+1] <= xs[i] + {{(i+1){ys[i][WIDTH-1]}}, ys[i][WIDTH-1:(i+1)]};
+					ys[i+1] <= ys[i] - {{(i+1){xs[i][WIDTH-1]}}, xs[i][WIDTH-1:(i+1)]};
 					phs[i+1] <= phs[i] + cordic_angle[i];
 				end 
 				else begin
-					xs[i+1] <= xs[i] - (ys[i]>>>(i+1));
-					ys[i+1] <= ys[i] + (xs[i]>>>(i+1));
+					xs[i+1] <= xs[i] - {{(i+1){ys[i][WIDTH-1]}}, ys[i][WIDTH-1:(i+1)]};
+					ys[i+1] <= ys[i] + {{(i+1){xs[i][WIDTH-1]}}, xs[i][WIDTH-1:(i+1)]};
 					phs[i+1] <= phs[i] - cordic_angle[i];
 				end
 			end
