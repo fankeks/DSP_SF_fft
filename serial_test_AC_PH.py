@@ -1,6 +1,7 @@
 import serial
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 
 def float_to_fix(x, n):
@@ -12,7 +13,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     y_true = y_true1
     fft_wave = np.fft.fft(y)
     cpu_AC_PH = np.array([np.abs(fft_wave[k]), 
-                          np.arctan(np.imag(fft_wave[k]) / np.real(fft_wave[k]))], dtype=np.float32)
+                          np.angle(fft_wave[k])], dtype=np.float32)
 
     for i in range(360):
         value = y1[i]
@@ -38,17 +39,17 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     fpga_AC_PH = np.array(fpga_AC_PH, dtype=np.float64)
     fpga_AC_PH[0] /= factor
     fpga_AC_PH[0] *= 0.6072529350324679
-    fpga_AC_PH[1] /= 2 ** (30)
+    fpga_AC_PH[1] /= 2 ** (28)
 
-    #print(f'Расчёт на cpu: {cpu_AC_PH}')
-    #print(f'Расчёт на fpga: {fpga_AC_PH}')
     loss = np.abs(cpu_AC_PH - fpga_AC_PH) / np.abs(cpu_AC_PH) * 100
-    print(f'Ошибка %: {loss}')
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
     if np.max(loss) >= 1:
         print('BAD')
+        print(f'Расчёт на cpu: {cpu_AC_PH}')
+        print(f'Расчёт на fpga: {fpga_AC_PH}')
+        print(f'Ошибка %: {loss}')
         plt.plot(y)
         plt.plot(y_true)
         plt.show()
@@ -62,7 +63,7 @@ def main():
     # configure the serial connections
     ser = serial.Serial(
         port='COM51',
-        baudrate=115200,
+        baudrate=300000,
     )
 
     if not ser.isOpen():
@@ -76,38 +77,39 @@ def main():
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
 
-    freqs = [25000, 26000, 24000, 20000]
-    M = [2 ** 12 - 10, 200]
-    for i in range(100):
-        if i%20 == 0:
-            print(f'{i}%')
-            print()
-        for f in freqs:
-            for max_value in M:
-                y1 = (np.sin(2*np.pi *f * t+1) + 1) / 2 * max_value
-                y2 = (np.sin(2*np.pi *f * t + 1.5) + 1) / 2 * (max_value - 1)
+    diap_f = [23000, 27000]
+    diap_A = [20, 2**12-1]
+    diap_PH = [-0.7, 0.7]
+    for i in tqdm(range(5000)):
+        f1 = np.random.uniform(diap_f[0], diap_f[1], 1)[0]
+        A1 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
+        PH1 = np.random.uniform(diap_PH[0], diap_PH[1], 1)[0]
 
-                n_f1 = np.random.normal(0, 100, size=1)
-                y_noise1 = (np.sin(2*np.pi *(f-n_f1) * t) + 1) / 2 * max_value
-                noise1 = np.random.normal(0, 20, size=len(y1))
-                y_noise1 = np.abs(y_noise1 + noise1)
-                y_noise1 = np.array(y_noise1, dtype=np.int16)
+        f2 = np.random.uniform(diap_f[0], diap_f[1], 1)[0]
+        A2 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
+        PH2 = np.random.uniform(diap_PH[0], diap_PH[1], 1)[0]
 
-                n_f2 = np.random.normal(0, 100, size=1)
-                y_noise2 = (np.sin(2*np.pi *(f-n_f2) * t) + 1) / 2 * max_value
-                noise2 = np.random.normal(0, 20, size=len(y1))
-                y_noise2 = np.abs(y_noise2 + noise2)
-                y_noise2 = np.array(y_noise2, dtype=np.int16)
+        y1 = (np.sin(2*np.pi *f1 * t + PH1) + 1) / 2 * A1
+        y2 = (np.sin(2*np.pi *f2 * t + PH2) + 1) / 2 * A2
 
-                res = test(ser, y_noise1, y_noise2, y1, y2, k, factor)
-                if res == 'BAD':
-                    print('-----------------------------------------------------------')
-                    print(f'Freq: {f}')
-                    print(f'Max_value: {max_value}')
-                    return
+        noise1 = np.random.normal(0, 20, size=len(y1))
+        y_noise1 = np.abs(y1 + noise1)
+        y_noise1 = np.array(y_noise1, dtype=np.uint16)
+
+        noise2 = np.random.normal(0, 20, size=len(y1))
+        y_noise2 = np.abs(y2 + noise2)
+        y_noise2 = np.array(y_noise2, dtype=np.uint16)
+
+        res = test(ser, y_noise1, y_noise2, y1, y2, k, factor)
+        if res == 'BAD':
+            print('-----------------------------------------------------------')
+            print(i)
+            print(f'Freq: {f1} {f2}')
+            print(f'Max_value: {A1} {A2}')
+            print(f'PH: {PH1} {PH2}')
+            return
     print('-----------------------------------------------------------')
     print('GOOD')
-    print(i)
 
 
 if __name__ == '__main__':

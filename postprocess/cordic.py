@@ -26,7 +26,7 @@ def dec_to_pol(x, y):
         y_cor = x + y
         ph = (315 - 360) / 180 * np.pi
 
-    N = 16
+    N = 18
     x_iter     = [x_cor for i in range(N+1)]
     y_iter     = [y_cor for i in range(N+1)]
     phase_iter = [ph for i in range(N+1)]
