@@ -1,3 +1,31 @@
-VCD info: dumpfile round.vcd opened for output.
+VCD info: dumpfile syst_node.vcd opened for output.
 VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
-round\testbench.sv:76: $finish called at 530000 (1ps)
+         1
+         1
+         5
+         1
+         1
+         5
+-         5
+         1
+-         1
+         5
+-         5
+-         1
+-         1
+-         5
+         5
+-         1
+         1
+-         5
+RESULTS
+  188899584
+   47472484
+  330018548
+  707505908
+  424959844
+ -707502236
+ -424956172
+  -47468812
+ -330014876
+dec_to_polar\testbench.sv:133: $finish called at 1050000 (1ps)

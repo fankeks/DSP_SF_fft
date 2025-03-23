@@ -13,7 +13,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     y_true = y_true1
     fft_wave = np.fft.fft(y)
     cpu_AC_PH = np.array([np.abs(fft_wave[k]), 
-                          np.angle(fft_wave[k])], dtype=np.float32)
+                          np.angle(fft_wave[k]) / np.pi * 180], dtype=np.float32)
 
     for i in range(360):
         value = y1[i]
@@ -39,13 +39,13 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     fpga_AC_PH = np.array(fpga_AC_PH, dtype=np.float64)
     fpga_AC_PH[0] /= factor
     fpga_AC_PH[0] *= 0.6072529350324679
-    fpga_AC_PH[1] /= 2 ** (28)
+    fpga_AC_PH[1] /= 2 ** (22)
 
     loss = np.abs(cpu_AC_PH - fpga_AC_PH) / np.abs(cpu_AC_PH) * 100
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 2.5:
+    if np.max(loss) >= 1:
         print('BAD')
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
@@ -85,26 +85,29 @@ def main():
         A1 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
         PH1 = np.random.uniform(diap_PH[0], diap_PH[1], 1)[0]
 
-        f2 = np.random.uniform(diap_f[0], diap_f[1], 1)[0]
         A2 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
         PH2 = np.random.uniform(diap_PH[0], diap_PH[1], 1)[0]
 
         y1 = (np.sin(2*np.pi *f1 * t + PH1) + 1) / 2 * A1
-        y2 = (np.sin(2*np.pi *f2 * t + PH2) + 1) / 2 * A2
+        y2 = (np.sin(2*np.pi *f1 * t + PH2) + 1) / 2 * A2
 
-        noise1 = np.random.normal(0, 20, size=len(y1))
+        noise1 = np.random.normal(0,0.5,len(y1))
         y_noise1 = np.abs(y1 + noise1)
+        y_noise1 += (1/5) * A1 * (np.sin(2 * np.pi * 2 * f1 * t + PH1) + 1) / 2  # Second harmonic
+        y_noise1 += (1/12) * A1 * (np.sin(2 * np.pi * 2 * f1 * t + PH1) + 1) / 2  # Second harmonic
         y_noise1 = np.array(y_noise1, dtype=np.uint16)
 
-        noise2 = np.random.normal(0, 20, size=len(y1))
+        noise2 = np.random.normal(0,0.5,len(y2))
         y_noise2 = np.abs(y2 + noise2)
+        y_noise2 += (1/5) * A2 * (np.sin(2 * np.pi * 2 * f1 * t + PH2) + 1) / 2  # Second harmonic
+        y_noise2 += (1/12) * A2 * (np.sin(2 * np.pi * 2 * f1 * t + PH2) + 1) / 2  # Second harmonic
         y_noise2 = np.array(y_noise2, dtype=np.uint16)
 
         res = test(ser, y_noise1, y_noise2, y1, y2, k, factor)
         if res == 'BAD':
             print('-----------------------------------------------------------')
             print(i)
-            print(f'Freq: {f1} {f2}')
+            print(f'Freq: {f1}')
             print(f'Max_value: {A1} {A2}')
             print(f'PH: {PH1} {PH2}')
             return
