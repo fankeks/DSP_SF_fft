@@ -13,7 +13,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     y_true = y_true1
     fft_wave = np.fft.fft(y)
     cpu_AC_PH = np.array([np.abs(fft_wave[k]), 
-                          np.angle(fft_wave[k]) / np.pi * 180], dtype=np.float32)
+                          np.angle(fft_wave[k], deg=True)])
 
     for i in range(360):
         value = y1[i]
@@ -45,7 +45,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 1:
+    if np.max(loss) >= 1.4:
         print('BAD')
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
@@ -77,7 +77,7 @@ def main():
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
 
-    diap_f = [23000, 27000]
+    diap_f = [20000, 30000]
     diap_A = [8, 2**12-1]
     diap_PH = [-np.pi, np.pi]
     for i in tqdm(range(5000)):

@@ -18,14 +18,4 @@ VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
 -         1
          1
 -         5
-RESULTS
-  188899584
-   47472484
-  330018548
-  707505908
-  424959844
- -707502236
- -424956172
-  -47468812
- -330014876
-dec_to_polar\testbench.sv:133: $finish called at 1050000 (1ps)
+dec_to_polar_fsm\testbench.sv:126: $finish called at 3230000 (1ps)
