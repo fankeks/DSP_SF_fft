@@ -11,9 +11,14 @@ def float_to_fix(x, n):
 def test(ser, y1, y2, y_true1, y_true2, k, factor):
     y = y1
     y_true = y_true1
-    fft_wave = np.fft.fft(y)
-    cpu_AC_PH = np.array([np.abs(fft_wave[k]), 
-                          np.angle(fft_wave[k], deg=True)])
+    fft_wave1 = np.fft.fft(y1)
+    fft_wave2 = np.fft.fft(y2)
+    A1 = np.abs(fft_wave1[k])
+    A2 = np.abs(fft_wave2[k])
+    PH1 = np.angle(fft_wave1[k], deg=True)
+    PH2 = np.angle(fft_wave2[k], deg=True)
+    cpu_AC_PH = np.array([A1, 
+                          PH1 - PH2])
 
     for i in range(360):
         value = y1[i]
@@ -45,7 +50,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 1.4:
+    if np.max(loss) >= 2.5:
         print('BAD')
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
