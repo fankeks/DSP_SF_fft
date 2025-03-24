@@ -7,7 +7,7 @@ module syst_node
 )
 (
     input  logic                       clk,
-    input  logic                       arstn,
+    input  logic                       rstn,
     input  logic                       enable,
     input  logic signed [W_WIDTH -1:0] weight_i,
 
@@ -27,25 +27,24 @@ module syst_node
     logic signed [SO_WIDTH       -1:0] psumm_reg;
     logic signed [X_WIDTH+W_WIDTH-1:0] weight_mult;
 
-    logic valid;
-    assign valid = valid_x_i & valid_psumm_i;
+    logic valid_o_logic;
+    assign valid_o_logic = valid_x_i & valid_psumm_i;
 
     // Расчёт результата
     logic en;
-    assign en = enable & valid;
+    assign en = enable & valid_o_logic;
     assign weight_mult = x_i * weight_i;
+    logic signed [SO_WIDTH - 1:0] psumm_o_logic;
+    assign psumm_o_logic = psumm_i + weight_mult;
     always_ff @(posedge clk) begin
-        if (en)
-            psumm_reg <= psumm_i + weight_mult;
+        if (~rstn)   psumm_reg <= weight_mult;
+        else if (en) psumm_reg <= psumm_o_logic;
     end
 
     // Расчёт валидности
-    always_ff @(posedge clk or negedge arstn) begin
-        if (~arstn)
-            valid_o <= '0;
-        else
-            if (enable)
-                valid_o <= valid;
+    always_ff @(posedge clk) begin
+        if (~rstn)       valid_o <= 'b0;
+        else if (enable) valid_o <= valid_o_logic;
     end
 
     assign psumm_o = psumm_reg;

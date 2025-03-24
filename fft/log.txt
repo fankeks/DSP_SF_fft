@@ -1,7 +1,6 @@
-WARNING: serial_fft_coral\testbench.sv:28: $readmemb: The behaviour for reg[...] mem[N:0]; $readmemb("...", mem); changed in the 1364-2005 standard. To avoid ambiguity, use mem[0:N] or explicit range parameters $readmemb("...", mem, start, stop);. Defaulting to 1364-2005 behavior.
-WARNING: serial_fft_coral\testbench.sv:28: Excess binary digits (16 of '11111111111111111111111111011100') while reading 16-bit words.
-WARNING: serial_fft_coral\testbench.sv:29: $readmemb: The behaviour for reg[...] mem[N:0]; $readmemb("...", mem); changed in the 1364-2005 standard. To avoid ambiguity, use mem[0:N] or explicit range parameters $readmemb("...", mem, start, stop);. Defaulting to 1364-2005 behavior.
-WARNING: serial_fft_coral\testbench.sv:29: Excess binary digits (17 of '100000000000000000000000000000000') while reading 16-bit words.
+WARNING: ./.\RAM_fft\RAM_w_re.sv:15: $readmemb(.\weigths\w_re.txt): Too many words in the file for the requested range [0:3].
+WARNING: ./.\RAM_fft\RAM_w_im.sv:15: Excess binary digits (17 of '100000000000000000000000000000000') while reading 16-bit words.
+WARNING: ./.\RAM_fft\RAM_w_im.sv:15: $readmemb(.\weigths\w_im.txt): Too many words in the file for the requested range [0:3].
 VCD info: dumpfile serial_fft_coral.vcd opened for output.
 VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
-serial_fft_coral\testbench.sv:852: $finish called at 7330000 (1ps)
+serial_fft_coral\testbench.sv:169: $finish called at 250000 (1ps)
