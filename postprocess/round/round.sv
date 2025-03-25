@@ -22,9 +22,7 @@ module round #(
         if (rst) o_vld <= 'b0;
         else begin
             o_vld <= i_vld;
-            if (i_vld) begin
-                o_data <= w_convergent[(W_IN-1):(W_IN-W_OUT)];
-            end
+            if (i_vld) o_data <= w_convergent[(W_IN-1):(W_IN-W_OUT)];
         end
     end
     

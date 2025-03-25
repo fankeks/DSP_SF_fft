@@ -25,16 +25,16 @@ module syst_node
 );
 
     logic signed [SO_WIDTH       -1:0] psumm_reg;
+    logic signed [SO_WIDTH       -1:0] psumm_o_logic;
     logic signed [X_WIDTH+W_WIDTH-1:0] weight_mult;
+    logic                              en;
 
-    logic valid_o_logic;
+    logic  valid_o_logic;
     assign valid_o_logic = valid_x_i & valid_psumm_i;
 
     // Расчёт результата
-    logic en;
     assign en = enable & valid_o_logic;
     assign weight_mult = x_i * weight_i;
-    logic signed [SO_WIDTH - 1:0] psumm_o_logic;
     assign psumm_o_logic = psumm_i + weight_mult;
     always_ff @(posedge clk)
         if (en) psumm_reg <= psumm_o_logic;

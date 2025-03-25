@@ -6,20 +6,20 @@ module	topolar_fsm
 	parameter NSTAGES    = 16
 )
 (
-	input                                clk, 
-	input                                rst, 
+	input                                     clk, 
+	input                                     rst, 
 
-	input  logic signed [WIDTH_PH-1:0]   cordic_angle,
-	output logic [$clog2(NSTAGES)-1:0] cnt,
+	input  logic signed [WIDTH_PH-1:0]        cordic_angle,
+	output logic        [$clog2(NSTAGES)-1:0] cnt,
 	
-	input                                i_vld,
-	input  logic signed [WIDTH_XY - 1:0] i_x, 
-	input  logic signed [WIDTH_XY - 1:0] i_y,
+	input                                     i_vld,
+	input  logic signed [WIDTH_XY - 1:0]      i_x, 
+	input  logic signed [WIDTH_XY - 1:0]      i_y,
 
-	output logic                         o_vld,
-	output logic signed [WIDTH_XY - 1:0] o_mag,
-	output logic signed [WIDTH_PH - 1:0] o_phase,
-	output logic                         ready
+	output logic                              o_vld,
+	output logic signed [WIDTH_XY - 1:0]      o_mag,
+	output logic signed [WIDTH_PH - 1:0]      o_phase,
+	output logic                              ready
 	);
 
 	enum logic[1:0]
@@ -39,12 +39,12 @@ module	topolar_fsm
 	logic en;
 	assign en = cnt == (NSTAGES - 1);
 	always_ff @(posedge clk) begin
-		if (rst) cnt <= 'b0;
+		if (rst)    cnt <= 'b0;
 		else if (state == BUSY) begin
 			if (en) cnt <= 'b0;
 			else    cnt <= cnt + 'b1;
 		end
-		else cnt <= 'b0;
+		else        cnt <= 'b0;
 	end
 
 	always_comb
@@ -55,7 +55,7 @@ module	topolar_fsm
 		BUSY:   if (en   ) new_state = OUTPUT;
 		OUTPUT: if (i_vld) new_state = BUSY;
 				else       new_state = IDLE;
-		default: new_state = state;
+		default:           new_state = state;
 		endcase
 	end
 
@@ -117,9 +117,9 @@ module	topolar_fsm
 		end
 	end 
 
-	assign o_mag = xs;
+	assign o_mag   = xs;
     assign o_phase = phs;
-	assign o_vld = state == OUTPUT;
-	assign ready = state != BUSY;
+	assign o_vld   = state == OUTPUT;
+	assign ready   = state != BUSY;
 
 endmodule
