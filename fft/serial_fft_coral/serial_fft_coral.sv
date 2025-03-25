@@ -52,9 +52,7 @@ module serial_fft_coral
         end
     
     logic reset_node;
-    always_ff @(negedge clk) begin
-        reset_node <= |counter;
-    end
+    assign reset_node = |counter;
 
     //------------------------------------------------------------------------
     // RE
@@ -63,6 +61,7 @@ module serial_fft_coral
         for (i = 0; i<CHANELS; i++) begin : RE
             logic signed [S_WIDTH-1:0] psumm_i_re;
             logic                valid_psumm_i_re;
+            assign psumm_i_re = reset_node ? psumm_o_re : 'b0;
 
             logic signed [S_WIDTH-1:0] psumm_o_re;
             logic                valid_psumm_o_re;
@@ -76,11 +75,11 @@ module serial_fft_coral
                 .SO_WIDTH (S_WIDTH)
             ) re_node1 (
                 .clk           (clk),
-                .rstn          (reset_node),
+                .rstn          (rstn),
                 .enable        (valid_i),
                 .weight_i      (w_re),
 
-                .psumm_i       (psumm_o_re),
+                .psumm_i       (psumm_i_re),
                 .valid_psumm_i (valid_psumm_i_re),
 
                 .x_i           (x[i]),
@@ -102,6 +101,8 @@ module serial_fft_coral
             logic signed [S_WIDTH-1:0] psumm_i_im;
             logic                valid_psumm_i_im;
 
+            assign psumm_i_im = reset_node ? psumm_o_im : 'b0;
+
             logic signed [S_WIDTH-1:0] psumm_o_im;
             logic                valid_psumm_o_im;
 
@@ -114,11 +115,11 @@ module serial_fft_coral
                 .SO_WIDTH (S_WIDTH)
             ) im_node1 (
                 .clk           (clk),
-                .rstn          (reset_node),
+                .rstn          (rstn),
                 .enable        (valid_i),
                 .weight_i      (w_im),
 
-                .psumm_i       (psumm_o_im),
+                .psumm_i       (psumm_i_im),
                 .valid_psumm_i (valid_psumm_i_im),
 
                 .x_i           (x[j]),

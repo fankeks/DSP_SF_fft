@@ -36,16 +36,13 @@ module syst_node
     assign weight_mult = x_i * weight_i;
     logic signed [SO_WIDTH - 1:0] psumm_o_logic;
     assign psumm_o_logic = psumm_i + weight_mult;
-    always_ff @(posedge clk) begin
-        if (~rstn)   psumm_reg <= weight_mult;
-        else if (en) psumm_reg <= psumm_o_logic;
-    end
+    always_ff @(posedge clk)
+        if (en) psumm_reg <= psumm_o_logic;
 
     // Расчёт валидности
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk)
         if (~rstn)       valid_o <= 'b0;
         else if (enable) valid_o <= valid_o_logic;
-    end
 
     assign psumm_o = psumm_reg;
     assign valid_x_o = valid_x_i;
