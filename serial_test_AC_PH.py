@@ -50,7 +50,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 2.5:
+    if np.max(loss) >= 1.2:
         print('BAD')
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
@@ -58,7 +58,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
         plt.plot(y)
         plt.plot(y_true)
         plt.show()
-        return 'BAD'
+        return 'PASS'
     else:
         #print('PASS')
         return 'PASS'

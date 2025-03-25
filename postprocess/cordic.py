@@ -26,14 +26,17 @@ def dec_to_pol(x, y):
         y_cor = x + y
         ph = (315 - 360)
 
-    N = 18
+    N = 21
     x_iter     = [x_cor for i in range(N+1)]
     y_iter     = [y_cor for i in range(N+1)]
     phase_iter = [ph for i in range(N+1)]
 
     table = [(np.arctan(2**-(i+1)) / np.pi * 180) for i in range(N)]
     print(table)
-    print([str(hex(np.int32(float_to_fix(table[i], 22))))[2:] for i in range(len(table))])
+    weights = [str(hex(np.int32(float_to_fix(table[i], 22))))[2:] for i in range(len(table))]
+    with open("weigths\\angle.txt", "w") as file:
+        for a in weights:
+            file.write(f"{a}\n")
 
     for i in range(N):
         if(y_iter[i] >= 0):
