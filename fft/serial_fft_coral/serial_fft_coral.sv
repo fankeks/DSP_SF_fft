@@ -52,7 +52,9 @@ module serial_fft_coral
         end
     
     logic reset_node;
-    assign reset_node = |counter;
+    always_ff @(negedge clk) begin
+        reset_node <= |counter;
+    end
 
     //------------------------------------------------------------------------
     // RE

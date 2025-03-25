@@ -9,7 +9,8 @@ module	topolar_fsm
 	input                                clk, 
 	input                                rst, 
 
-	input  logic signed [WIDTH_PH-1:0]   cordic_angle [0:(NSTAGES-1)],
+	input  logic signed [WIDTH_PH-1:0]   cordic_angle,
+	output logic [$clog2(NSTAGES)-1:0] cnt,
 	
 	input                                i_vld,
 	input  logic signed [WIDTH_XY - 1:0] i_x, 
@@ -35,8 +36,6 @@ module	topolar_fsm
     	state <= new_state;
 
 	// Логика переходов
-	localparam counter_width = $clog2 (NSTAGES + 1);
-	logic [counter_width-1:0] cnt;
 	logic en;
 	assign en = cnt == (NSTAGES - 1);
 	always_ff @(posedge clk) begin
@@ -108,12 +107,12 @@ module	topolar_fsm
 			if (sig) begin
 				xs <= xs + (ys_abs >> (cnt + 'b1));
 				ys <= ys + (xs >> (cnt + 'b1));
-				phs <= phs - cordic_angle[cnt];
+				phs <= phs - cordic_angle;
 			end 
 			else begin
 				xs <= xs + (ys >> (cnt + 'b1));
 				ys <= ys - (xs >> (cnt + 'b1));
-				phs <= phs + cordic_angle[cnt];
+				phs <= phs + cordic_angle;
 			end
 		end
 	end 

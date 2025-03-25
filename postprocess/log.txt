@@ -1,3 +1,4 @@
+WARNING: ./.\RAM_angle\RAM_angle.sv:15: $readmemh(.\weigths\angle.txt): Too many words in the file for the requested range [0:15].
 VCD info: dumpfile syst_node.vcd opened for output.
 VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
          1
@@ -18,4 +19,4 @@ VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
 -         1
          1
 -         5
-dec_to_polar_fsm\testbench.sv:150: $finish called at 3230000 (1ps)
+dec_to_polar_fsm\testbench.sv:143: $finish called at 3230000 (1ps)
