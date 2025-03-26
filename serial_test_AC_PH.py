@@ -9,15 +9,13 @@ def float_to_fix(x, n):
 
 
 def test(ser, y1, y2, y_true1, y_true2, k, factor):
-    y = y1
-    y_true = y_true1
     fft_wave1 = np.fft.fft(y1)
     fft_wave2 = np.fft.fft(y2)
     A1 = np.abs(fft_wave1[k])
     A2 = np.abs(fft_wave2[k])
     PH1 = np.angle(fft_wave1[k], deg=True)
     PH2 = np.angle(fft_wave2[k], deg=True)
-    cpu_AC_PH = np.array([A1, 
+    cpu_AC_PH = np.array([A1 / A2, 
                           PH1 - PH2])
 
     for i in range(360):
@@ -43,20 +41,21 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
 
     fpga_AC_PH = np.array(fpga_AC_PH, dtype=np.float64)
     fpga_AC_PH[0] /= factor
-    fpga_AC_PH[0] *= 0.6072529350324679
+    #fpga_AC_PH[0] *= 0.6072529350324679
     fpga_AC_PH[1] /= 2 ** (22)
 
     loss = np.abs(cpu_AC_PH - fpga_AC_PH) / np.abs(cpu_AC_PH) * 100
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 1.2:
+    if np.max(loss) >= 1:
         print('BAD')
+        print(A1, A2)
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
         print(f'Ошибка %: {loss}')
-        plt.plot(y)
-        plt.plot(y_true)
+        plt.plot(y1)
+        plt.plot(y2)
         plt.show()
         return 'PASS'
     else:
@@ -77,7 +76,7 @@ def main():
 
     n = 360
     k = 356
-    factor = 2**3
+    factor = 2**8
     #fs is sampling frequency
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
@@ -92,6 +91,9 @@ def main():
 
         A2 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
         PH2 = np.random.uniform(diap_PH[0], diap_PH[1], 1)[0]
+
+        if (A1 < A2):
+            A1, A2 = A2, A1
 
         y1 = (np.sin(2*np.pi *f1 * t + PH1) + 1) / 2 * A1
         y2 = (np.sin(2*np.pi *f1 * t + PH2) + 1) / 2 * A2

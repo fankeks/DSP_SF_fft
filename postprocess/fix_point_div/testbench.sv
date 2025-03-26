@@ -6,16 +6,33 @@ module test;
     logic                clk;
     logic                arstn;
 
-    logic signed	[31:0] a, b;
+    logic [31:0] a, b;
     logic i_vld;
 
-    logic signed	[31:0] c;
+    logic [31:0] c;
     logic o_vld;
+    logic ready;
 
-    div tp (
-        .a (a),
-        .b (b),
-        .c (c)
+    fxp_div_fsm #(
+        .WIIA(29),
+        .WIFA(3),
+
+        .WIIB(29),
+        .WIFB(3),
+
+        .WOI(16),
+        .WOF(16)
+        ) tp (
+        .clk (clk),
+        .rstn (arstn),
+
+        .i_vld (i_vld),
+        .dividend (a),
+        .divisor (b),
+
+        .out (c),
+        .o_vld(o_vld),
+        .ready (ready)
     );
 
     initial begin
@@ -45,40 +62,14 @@ module test;
     initial begin
 
         wait(arstn);
+        i_vld <= 'b1;
+        a <= 'd5 << 8;
+        b <= 'd2 << 8;
         @(posedge clk);
     //---------------------------------------------------------------------------------------------
         @(posedge clk);
-
-        a <= 32'd1 << 'd3;
-        b <= 32'd1 << 'd3;
-
-        @(posedge clk);
-        a <= 32'd5 << 'd3;
-        b <= 32'd1 << 'd3;
-
-        @(posedge clk);
-        a <= 32'd1 << 'd3;
-        b <= 32'd5 << 'd3;
-
-        @(posedge clk);
-        a <= -32'd5 << 'd3;
-        b <= 32'd1 << 'd3;
-
-        @(posedge clk);
-        a <= -32'd1 << 'd3;
-        b <= 32'd5 << 'd3;
-
-        @(posedge clk);
-        a <= -32'd5 << 'd3;
-        b <= -32'd1 << 'd3;
-
-        @(posedge clk);
-        a <= -32'd1 << 'd3;
-        b <= -32'd5 << 'd3;
-
-        @(posedge clk);
         $display("RESULTS");
-        repeat(9) begin
+        repeat(32) begin
             @(posedge clk);
             //$display("%d", o_phase);
         end
