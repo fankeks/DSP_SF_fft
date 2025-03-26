@@ -7,7 +7,7 @@ module ff_fifo_wrapped_in_valid_ready
 )
 (
     input                clk,
-    input                rst,
+    input                rstn,
 
     input                up_valid,    // upstream
     output               up_ready,
@@ -29,12 +29,13 @@ module ff_fifo_wrapped_in_valid_ready
     assign down_valid = ~ fifo_empty;
     assign fifo_pop   = down_valid & down_ready;
 
-    flip_flop_fifo_empty_full_optimized
-    # (.width (width), .depth (depth))
-    fifo
+    flip_flop_fifo_empty_full_optimized# 
     (
+        .width (width), 
+        .depth (depth)
+    ) fifo (
         .clk        ( clk        ),
-        .rst        ( rst        ),
+        .rstn        ( rstn        ),
         .push       ( fifo_push  ),
         .pop        ( fifo_pop   ),
         .write_data ( up_data    ),

@@ -1,5 +1,5 @@
 
-module	topolar_fsm
+module dec_to_polar_fsm
 #(
     parameter WIDTH_XY   = 32,
 	parameter WIDTH_PH   = 32,
@@ -7,7 +7,7 @@ module	topolar_fsm
 )
 (
 	input                                     clk, 
-	input                                     rst, 
+	input                                     rstn, 
 
 	input  logic signed [WIDTH_PH-1:0]        cordic_angle,
 	output logic        [$clog2(NSTAGES)-1:0] cnt,
@@ -30,7 +30,7 @@ module	topolar_fsm
 	}
 	state, new_state;
 	always_ff @ (posedge clk)
-    if (rst)
+    if (!rstn)
     	state <= IDLE;
     else
     	state <= new_state;
@@ -39,7 +39,7 @@ module	topolar_fsm
 	logic en;
 	assign en = cnt == (NSTAGES - 1);
 	always_ff @(posedge clk) begin
-		if (rst)    cnt <= 'b0;
+		if (!rstn)    cnt <= 'b0;
 		else if (state == BUSY) begin
 			if (en) cnt <= 'b0;
 			else    cnt <= cnt + 'b1;

@@ -7,7 +7,7 @@ module flip_flop_fifo_empty_full_optimized
 )
 (
     input                clk,
-    input                rst,
+    input                rstn,
     input                push,
     input                pop,
     input  [width - 1:0] write_data,
@@ -32,8 +32,8 @@ module flip_flop_fifo_empty_full_optimized
 
     //------------------------------------------------------------------------
 
-    always_ff @ (posedge clk or posedge rst)
-        if (rst)
+    always_ff @ (posedge clk)
+        if (!rstn)
         begin
             wr_ptr <= '0;
             wr_ptr_odd_circle <= 1'b0;
@@ -53,8 +53,8 @@ module flip_flop_fifo_empty_full_optimized
 
     //------------------------------------------------------------------------
 
-    always_ff @ (posedge clk or posedge rst)
-        if (rst)
+    always_ff @ (posedge clk)
+        if (!rstn)
         begin
             rd_ptr <= '0;
             rd_ptr_odd_circle <= 1'b0;

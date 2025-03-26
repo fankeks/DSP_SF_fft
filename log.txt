@@ -1,0 +1,7 @@
+WARNING: ./.\\fft\\RAM_fft\\RAM_w_re.sv:15: Excess binary digits (16 of '11111111111111111111111111011100') while reading 16-bit words.
+WARNING: ./.\\fft\\RAM_fft\\RAM_w_re.sv:15: $readmemb(.\weigths\w_re.txt): Too many words in the file for the requested range [0:32].
+WARNING: ./.\\fft\\RAM_fft\\RAM_w_im.sv:15: Excess binary digits (17 of '100000000000000000000000000000000') while reading 16-bit words.
+WARNING: ./.\\fft\\RAM_fft\\RAM_w_im.sv:15: $readmemb(.\weigths\w_im.txt): Too many words in the file for the requested range [0:32].
+VCD info: dumpfile computing_cascade.vcd opened for output.
+VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
+.\computing_cascade_tb.sv:105: $finish called at 3810 (1s)

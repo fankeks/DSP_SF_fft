@@ -29,9 +29,9 @@ module test;
         .data_out (cordic_angle)
     );
 
-    topolar_fsm tp (
+    dec_to_polar_fsm tp (
         .clk           (clk),
-        .rst         (~arstn),
+        .rstn         (arstn),
 
         .cordic_angle (cordic_angle),
         .cnt (cnt),
@@ -47,7 +47,7 @@ module test;
     );
 
     initial begin
-        $dumpfile("syst_node.vcd");
+        $dumpfile("dec_to_polar_fsm.vcd");
         $dumpvars;
     end
 

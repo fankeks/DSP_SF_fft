@@ -4,7 +4,7 @@ module round #(
 ) 
 (
     input                    clk,
-    input                    rst,
+    input                    rstn,
 
     input  logic [W_IN-1:0]  i_data,
     input  logic             i_vld,
@@ -19,7 +19,7 @@ module round #(
                                                 };
 
     always_ff @(posedge clk) begin
-        if (rst) o_vld <= 'b0;
+        if (!rstn) o_vld <= 'b0;
         else begin
             o_vld <= i_vld;
             if (i_vld) o_data <= w_convergent[(W_IN-1):(W_IN-W_OUT)];

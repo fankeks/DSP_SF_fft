@@ -20,14 +20,14 @@ module test;
     )
     r1
     (
-        .clk           (clk),
-        .rst           (~arstn),
+        .clk    (clk),
+        .rstn   (arstn),
 
         .i_data (i_data),
-        .i_vld (i_vld),
+        .i_vld  (i_vld),
 
         .o_data (o_data),
-        .o_vld (o_vld)
+        .o_vld  (o_vld)
 
     );
 

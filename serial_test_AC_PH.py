@@ -51,6 +51,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     if np.max(loss) >= 1:
         print('BAD')
         print(A1, A2)
+        print(np.max(y1) / np.max(y2))
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
         print(f'Ошибка %: {loss}')

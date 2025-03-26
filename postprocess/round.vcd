@@ -1,5 +1,5 @@
 $date
-	Fri Mar 21 18:24:22 2025
+	Wed Mar 26 19:12:10 2025
 $end
 $version
 	Icarus Verilog
@@ -18,18 +18,17 @@ $scope module r1 $end
 $var wire 1 $ clk $end
 $var wire 33 ' i_data [32:0] $end
 $var wire 1 & i_vld $end
-$var wire 1 ( rst $end
-$var wire 33 ) w_convergent [32:0] $end
-$var reg 32 * o_data [31:0] $end
+$var wire 1 # rstn $end
+$var wire 33 ( w_convergent [32:0] $end
+$var reg 32 ) o_data [31:0] $end
 $var reg 1 ! o_vld $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
-bx *
 bx )
-1(
+bx (
 bx '
 0&
 bx %
@@ -48,7 +47,6 @@ $end
 #40000
 0$
 #50000
-0(
 1#
 1$
 #60000
@@ -58,7 +56,7 @@ $end
 #80000
 0$
 #90000
-b10000000000000000 )
+b10000000000000000 (
 b1111111111111111 %
 b1111111111111111 '
 1&
@@ -67,7 +65,7 @@ b1111111111111111 '
 0$
 #110000
 b1000000000000000 "
-b1000000000000000 *
+b1000000000000000 )
 1!
 0&
 1$
