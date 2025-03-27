@@ -15,7 +15,7 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
     A2 = np.abs(fft_wave2[k])
     PH1 = np.angle(fft_wave1[k], deg=True)
     PH2 = np.angle(fft_wave2[k], deg=True)
-    cpu_AC_PH = np.array([A1 / A2, 
+    cpu_AC_PH = np.array([A2, 
                           PH1 - PH2])
 
     for i in range(360):
@@ -41,24 +41,23 @@ def test(ser, y1, y2, y_true1, y_true2, k, factor):
 
     fpga_AC_PH = np.array(fpga_AC_PH, dtype=np.float64)
     fpga_AC_PH[0] /= factor
-    #fpga_AC_PH[0] *= 0.6072529350324679
+    fpga_AC_PH[0] *= 0.6072529350324679
     fpga_AC_PH[1] /= 2 ** (22)
 
+    #print(cpu_AC_PH[1], fpga_AC_PH[1])
     loss = np.abs(cpu_AC_PH - fpga_AC_PH) / np.abs(cpu_AC_PH) * 100
     # plt.plot(y)
     # plt.plot(y_true)
     # plt.show()
-    if np.max(loss) >= 1:
+    if (loss[0] >= 1) or (np.abs(cpu_AC_PH[1] - fpga_AC_PH[1]) >= 0.03):
         print('BAD')
-        print(A1, A2)
-        print(np.max(y1) / np.max(y2))
         print(f'Расчёт на cpu: {cpu_AC_PH}')
         print(f'Расчёт на fpga: {fpga_AC_PH}')
         print(f'Ошибка %: {loss}')
         plt.plot(y1)
         plt.plot(y2)
         plt.show()
-        return 'PASS'
+        return 'BAD'
     else:
         #print('PASS')
         return 'PASS'
@@ -77,7 +76,7 @@ def main():
 
     n = 360
     k = 356
-    factor = 2**8
+    factor = 2**4
     #fs is sampling frequency
     fs = 2.2857 * 10 ** 6
     t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
@@ -117,7 +116,7 @@ def main():
             print(i)
             print(f'Freq: {f1}')
             print(f'Max_value: {A1} {A2}')
-            print(f'PH: {PH1} {PH2}')
+            print(f'PH: {PH1 / np.pi * 180} {PH2 / np.pi * 180}')
             return
     print('-----------------------------------------------------------')
     print('GOOD')

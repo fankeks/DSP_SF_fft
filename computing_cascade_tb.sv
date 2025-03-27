@@ -16,7 +16,7 @@ module testbench;
     logic signed [X_WIDTH-1:0]                   x2;
 
     logic signed [31:0]                          delta_ph;
-    logic        [31:0]                          div_mag;
+    logic        [31:0]                          mag;
     logic                                        o_vld;
 
     computing_cascade #(
@@ -35,7 +35,7 @@ module testbench;
         .x2            (x2    ),
 
         .delta_ph (delta_ph),
-        .div_mag  (div_mag),
+        .mag  (mag),
         .o_vld    (o_vld)
     );
 

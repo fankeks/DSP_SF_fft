@@ -30,7 +30,7 @@ module computing_cascade
 
     output logic [$clog2(FRAME_LENGTH) - 1:0] cnt,
 
-    output logic [31:0] div_mag,
+    output logic [31:0] mag,
     output logic signed [31:0] delta_ph,
     output logic o_vld
 );
@@ -217,51 +217,10 @@ module computing_cascade
     );
 
     //#############################################################################################
-    // Расчёт дельт
+    // Расчёт дельты
 
-    logic signed [31:0] o_mag;
-    logic signed [31:0] o_phase;
-    logic valid_phase;
-    logic valid_div;
-
-    ff_fifo_wrapped_in_valid_ready #(
-        .width(32), 
-        .depth(2)
-    ) delta_PH_fifo (
-    .clk  (clk),
-    .rstn (rstn),
-
-    .up_valid (to_polar_vld),
-    .up_data  (o_phase1 - o_phase2),
-
-    .down_valid(valid_phase),  // downstream
-    .down_ready(o_vld),
-    .down_data(delta_ph)
-    );
-
-    localparam f_part = W_WIDTH + 32 - S_WIDTH;
-    localparam i_part = 32 - f_part;
-    fxp_div_fsm #(
-        .WIIA(i_part),
-        .WIFA(f_part),
-
-        .WIIB(i_part),
-        .WIFB(f_part),
-
-        .WOI(24),
-        .WOF(8)
-    ) div (
-        .clk (clk),
-        .rstn (rstn),
-
-        .i_vld (to_polar_vld),
-        .dividend (o_mag1),
-        .divisor  (o_mag2),
-
-        .out (div_mag),
-        .o_vld(valid_div)
-    );
-
-    assign o_vld = valid_div & valid_phase;
+    assign delta_ph = o_phase1 - o_phase2;
+    assign mag = o_mag2;
+    assign o_vld = to_polar_vld;
     
 endmodule
