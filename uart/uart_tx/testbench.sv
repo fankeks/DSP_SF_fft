@@ -23,7 +23,7 @@ module test;
   )
   mrx1 
   (.clk(clk), 
-   .arstn(arstn), 
+   .rstn(arstn), 
    .tx(tx), 
   
    .data_i(data_i), 

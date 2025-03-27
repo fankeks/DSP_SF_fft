@@ -7,7 +7,7 @@ module uart_rx_writer
 )
 (
     input clk,
-    input arstn,
+    input rstn,
     input rx,
 
     output logic [7:0] data,
@@ -22,8 +22,8 @@ module uart_rx_writer
     } states;
     states state, next_state;
 
-    always_ff @ (posedge clk or negedge arstn) begin
-        if (!arstn)
+    always_ff @ (posedge clk) begin
+        if (!rstn)
             state <= WAIT;
         else
             state <= next_state;
@@ -36,7 +36,7 @@ module uart_rx_writer
     wire read_stop_bit;
 
     always_ff @ (posedge clk) begin
-        if ((!arstn) | (state == WAIT))
+        if ((!rstn) | (state == WAIT))
             cnt <= scale - 'b1 + scale / 2;
         else
             if (enable)
@@ -47,7 +47,7 @@ module uart_rx_writer
     assign enable = (cnt == '0);
 
     always_ff @ (posedge clk) begin
-        if ((!arstn) | (state == WAIT))
+        if ((!rstn) | (state == WAIT))
             read_bit <= '0;
         else
             if (enable)
@@ -91,7 +91,7 @@ module uart_rx_module
 )
 (
     input clk,
-    input arstn,
+    input rstn,
     input rx,
 
     output logic [N - 1:0][7:0]          data,
@@ -107,7 +107,7 @@ module uart_rx_module
     )uart_rx_w
     (
         .clk(clk),
-        .arstn(arstn),
+        .rstn(rstn),
         .rx(rx),
 
         .valid(uart_valid),
@@ -130,7 +130,7 @@ module uart_rx_module
     .NI (1)    // max push
     ) buffer (
         .clk(clk),
-        .rst(~arstn),
+        .rstn(rstn),
 
         .push(push),
         .push_data(uart_data),

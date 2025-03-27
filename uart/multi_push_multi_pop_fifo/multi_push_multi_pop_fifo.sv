@@ -6,7 +6,7 @@ module multi_push_multi_pop_fifo #(
 ) 
 (
     input  logic                         clk,
-    input  logic                         rst,
+    input  logic                         rstn,
 
     input  logic [$clog2(NI + 1) - 1 : 0] push,
     input  logic [ NI - 1 : 0][W - 1 : 0] push_data,
@@ -34,8 +34,8 @@ module multi_push_multi_pop_fifo #(
 
     //------------------------------------------------------------------------
 
-    always_ff @ (posedge clk or posedge rst)
-        if (rst)
+    always_ff @ (posedge clk)
+        if (!rstn)
         begin
             wr_ptr <= '0;
             wr_ptr_odd_circle <= 1'b0;
@@ -55,8 +55,8 @@ module multi_push_multi_pop_fifo #(
 
     //------------------------------------------------------------------------
 
-    always_ff @ (posedge clk or posedge rst)
-        if (rst)
+    always_ff @ (posedge clk)
+        if (!rstn)
         begin
             rd_ptr <= '0;
             rd_ptr_odd_circle <= 1'b0;

@@ -8,7 +8,7 @@ module testbench;
     localparam WN = $clog2(N + 1);
 
     logic                clk;
-    logic                rst;
+    logic                rstn;
 
     logic [WN - 1 : 0] push;
     logic [N - 1 : 0][W - 1 : 0] push_data;
@@ -26,7 +26,7 @@ module testbench;
     .NO (N)   // max push / pop
     ) node (
         .clk(clk),
-        .rst(rst),
+        .rstn(rstn),
 
         .push(push),
         .push_data(push_data),
@@ -55,17 +55,17 @@ module testbench;
 
     //Генерация rst
     initial begin
-        rst <= 'b1;
+        rstn <= 'b0;
         @(posedge clk);
         @(posedge clk);
         @(posedge clk);
-        rst <= 'b0;
+        rstn <= 'b1;
     end
 
     // Генерация входных сигналов
     initial begin
         pop <= 'b0;
-        wait(rst);
+        wait(rstn);
         @(posedge clk);
         @(posedge clk);
         @(posedge clk);

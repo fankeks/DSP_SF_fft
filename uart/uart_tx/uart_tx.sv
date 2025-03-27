@@ -6,7 +6,7 @@ module uart_tx_writer
 )
 (
     input clk,
-    input arstn,
+    input rstn,
 
     input valid,
     input [7:0] data,
@@ -25,7 +25,7 @@ module uart_tx_writer
     states state, next_state;
 
     always_ff @ (posedge clk) begin
-        if (!arstn)
+        if (!rstn)
             state <= READY_TO_LOAD;
         else
             state <= next_state;
@@ -38,7 +38,7 @@ module uart_tx_writer
     wire output_stop_bit;
 
     always_ff @ (posedge clk) begin
-        if (!arstn | (state == READY_TO_LOAD))
+        if (!rstn | (state == READY_TO_LOAD))
             cnt <= scale - 'b1;
         else
             if (enable)
@@ -49,7 +49,7 @@ module uart_tx_writer
     assign enable = (cnt == '0);
 
     always_ff @ (posedge clk) begin
-        if (!arstn | (state == READY_TO_LOAD))
+        if (!rstn | (state == READY_TO_LOAD))
             output_bit <= 'b0;
         else
             if (enable)
@@ -106,7 +106,7 @@ module uart_tx_module
 )
 (
     input                                clk,
-    input                                arstn,
+    input                                rstn,
 
     input  logic [$clog2(N + 1) - 1 : 0] push,        // Количество эллементов, которые запишутся в буфер
     output logic [$clog2(N + 1) - 1 : 0] can_push,    // Количество мест в буфере
@@ -133,7 +133,7 @@ module uart_tx_module
     .NI (N)    // max push
     ) buffer (
         .clk(clk),
-        .rst(~arstn),
+        .rstn(rstn),
 
         .push(push_uart),
         .push_data(data_i),
@@ -150,7 +150,7 @@ module uart_tx_module
         .boadrate (boadrate)
     ) uart (
         .clk       (clk   ),
-        .arstn     (arstn ),
+        .rstn     (rstn ),
 
         .valid     (down_valid),
         .data      (down_data),

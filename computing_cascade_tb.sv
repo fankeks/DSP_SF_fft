@@ -66,7 +66,7 @@ module testbench;
     initial begin
         GLOBAL_COUNTER <= 'b0;
         wait(i_vld);
-        repeat(160) begin
+        repeat(10000) begin
             @(posedge clk);
             GLOBAL_COUNTER <= GLOBAL_COUNTER + 'b1;
         end
@@ -83,11 +83,22 @@ module testbench;
     //---------------------------------------------------------------------------------------------
         //1
         repeat(FRAME_LENGTH) begin
+            i_vld <= 'b1;
+            x1 <= x1 + 'd1;
+            x2 <= x2 + 'd2;
+            @(posedge clk);
+            i_vld <= 'b0;
+            repeat(8) begin
+                @(posedge clk);
+            end
+        end
+        repeat(FRAME_LENGTH) begin
             @(posedge clk);
             i_vld <= 'b1;
             x1 <= x1 + 'd1;
             x2 <= x2 + 'd2;
         end
+
         repeat(FRAME_LENGTH) begin
             @(posedge clk);
             i_vld <= 'b1;
