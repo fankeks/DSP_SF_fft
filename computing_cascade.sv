@@ -41,7 +41,7 @@ module computing_cascade
     logic signed [W_WIDTH-1:0] w_im;
     logic signed [CHANELS-1:0][S_WIDTH-1:0] re;
     logic signed [CHANELS-1:0][S_WIDTH-1:0] im;
-    logic valid_fft_coral;
+    logic valid_fft;
 
     RAM_w_re #(
         .WIDTH(W_WIDTH),
@@ -79,16 +79,8 @@ module computing_cascade
 
         .re        (re              ),
         .im        (im              ),
-        .valid_o   (valid_fft_coral )
+        .valid_o   (valid_fft )
     );
-    // valid в 1 такт
-    logic valid_fft_prev;
-    logic valid_fft;
-    always_ff @(posedge clk) begin
-        if (!rstn) valid_fft_prev <= 'b0;
-        else       valid_fft_prev <= valid_fft_coral;
-    end
-    assign valid_fft = ~valid_fft_prev & valid_fft_coral;
 
     //#######################################################################
     // Округление

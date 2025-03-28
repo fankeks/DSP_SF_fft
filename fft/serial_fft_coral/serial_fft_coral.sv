@@ -1,5 +1,5 @@
-`include ".\syst_node\syst_node.sv"
-//`include ".\\fft\\syst_node\\syst_node.sv"
+//`include ".\syst_node\syst_node.sv"
+`include ".\\fft\\syst_node\\syst_node.sv"
 
 module serial_fft_coral
 #(
@@ -34,20 +34,18 @@ module serial_fft_coral
     logic counter_enable;
     assign counter_enable = counter == (FRAME_LENGTH - 1);
     assign finish = counter_enable & valid_i;
+    always_ff @(posedge clk) begin
+        if (!rstn)              valid_o <= 'b0;
+        else if(counter_enable) valid_o <= valid_i;
+        else                    valid_o <= 'b0;
+    end
     always_ff @ (posedge clk)
         if (!rstn) begin
-            counter <= 'b0;
-            valid_o <= 'b0;
+                                counter <= 'b0;
         end
         else if (valid_i) begin
-            if (counter_enable) begin
-                counter <= '0;
-                valid_o <= 'b1;
-            end
-            else begin
-                counter <= counter + 1'b1;
-                valid_o <= 'b0;
-            end
+            if (counter_enable) counter <= 'b0;
+            else                counter <= counter + 1'b1;
         end
     
     logic reset_node;
