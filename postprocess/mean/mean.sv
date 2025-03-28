@@ -36,7 +36,7 @@ module mean
 
     always_ff @(posedge clk) begin
         if (!rstn)       o_vld <= 'b0;
-        else if (enable) o_vld <= 'b1;
+        else if (enable) o_vld <= i_vld;
         else             o_vld <= 'b0;
     end
 
