@@ -1,5 +1,5 @@
-//`include ".\syst_node\syst_node.sv"
-`include ".\\fft\\syst_node\\syst_node.sv"
+`include ".\syst_node\syst_node.sv"
+//`include ".\\fft\\syst_node\\syst_node.sv"
 
 module serial_fft_coral
 #(
@@ -23,7 +23,8 @@ module serial_fft_coral
     
     output logic signed [CHANELS-1:0] [S_WIDTH-1:0] re,
     output logic signed [CHANELS-1:0] [S_WIDTH-1:0] im,
-    output logic signed                             valid_o
+    output logic                                    valid_o,
+    output logic                                    finish
 );
     //------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ module serial_fft_coral
     // Счётчик для мультиплексирования
     logic counter_enable;
     assign counter_enable = counter == (FRAME_LENGTH - 1);
+    assign finish = counter_enable & valid_i;
     always_ff @ (posedge clk)
         if (!rstn) begin
             counter <= 'b0;

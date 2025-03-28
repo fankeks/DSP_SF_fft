@@ -18,9 +18,10 @@ module a
     input  logic                                       valid_i,
     input  logic signed [CHANELS-1:0] [X_WIDTH-1:0]    x,
     
-    output logic signed [CHANELS-1:0][S_WIDTH-1:0]                  re,
-    output logic signed [CHANELS-1:0][S_WIDTH-1:0]                  im,
-    output logic signed                                valid_o
+    output logic signed [CHANELS-1:0][S_WIDTH-1:0]     re,
+    output logic signed [CHANELS-1:0][S_WIDTH-1:0]     im,
+    output logic                                       valid_o,
+    output logic                                       finish
 );
     logic signed [W_WIDTH-1:0] w_re;
     logic signed [W_WIDTH-1:0] w_im;
@@ -64,7 +65,8 @@ module a
 
         .re            (re),
         .im            (im),
-        .valid_o       (valid_o)
+        .valid_o       (valid_o),
+        .finish        (finish)
     );
 endmodule
 
@@ -90,6 +92,7 @@ module testbench;
     logic signed [CHANELS-1:0][S_WIDTH-1:0]      im;
     logic signed [S_WIDTH-1:0] im1;
     logic                                        valid_o;
+    logic                                        finish;
     assign re1 = re[0];
     assign im1 = im[0];
 
@@ -108,7 +111,8 @@ module testbench;
 
         .re            (re),
         .im            (im),
-        .valid_o       (valid_o)
+        .valid_o       (valid_o),
+        .finish        (finish)
     );
 
     initial begin
@@ -161,6 +165,9 @@ module testbench;
         x2 <= 'd8;
 
         @(posedge clk);
+        valid_i <= 'b0;
+
+        @(posedge clk);
         @(posedge clk);
         @(posedge clk);
         @(posedge clk);
@@ -169,35 +176,4 @@ module testbench;
         $finish;
     end
     
-    // Проверка
-    // initial begin
-    //     wait(~arstn);
-    //     @(posedge clk);
-    //     @(posedge clk);
-    // //---------------------------------------------------------------------------------------------
-    //     repeat (32)
-    //     begin
-    //         @(posedge clk);
-    //         if ($signed(psumm_o) != ($signed(psumm_i) + $signed(weight_i) * $signed(x_i) )) begin
-    //             $display($signed(psumm_o));
-    //             $display(($signed(psumm_i) + $signed(weight_i) * $signed(x_i)));
-    //             $display($signed(psumm_i));
-    //             $display($signed(weight_i));
-    //             $display($signed(x_i));
-    //             $error("BAD");
-    //         end
-    //         else begin
-    //             $display("PASS");
-    //             // $display($signed(psumm_o));
-    //             // $display($signed(psumm_i));
-    //             // $display($signed(weight_i));
-    //             // $display($signed(x_i));
-    //         end
-    //     end
-    // //---------------------------------------------------------------------------------------------
-    //     @(posedge clk);
-    //     @(posedge clk);
-    //     @(posedge clk);
-    //     $finish;
-    // end
 endmodule
