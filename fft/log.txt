@@ -1,6 +1,0 @@
-WARNING: ./.\RAM_fft\RAM_w_re.sv:15: $readmemb(.\weigths\w_re.txt): Too many words in the file for the requested range [0:3].
-WARNING: ./.\RAM_fft\RAM_w_im.sv:15: Excess binary digits (17 of '100000000000000000000000000000000') while reading 16-bit words.
-WARNING: ./.\RAM_fft\RAM_w_im.sv:15: $readmemb(.\weigths\w_im.txt): Too many words in the file for the requested range [0:3].
-VCD info: dumpfile serial_fft_coral.vcd opened for output.
-VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
-serial_fft_coral\testbench.sv:176: $finish called at 270000 (1ps)

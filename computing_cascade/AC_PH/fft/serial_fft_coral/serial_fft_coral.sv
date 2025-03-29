@@ -1,5 +1,5 @@
 //`include ".\syst_node\syst_node.sv"
-`include ".\\fft\\syst_node\\syst_node.sv"
+`include ".\\AC_PH\\fft\\syst_node\\syst_node.sv"
 
 module serial_fft_coral
 #(

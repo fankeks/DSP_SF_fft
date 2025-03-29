@@ -18,8 +18,9 @@ module testbench;
     logic signed [31:0]                          delta_ph;
     logic        [31:0]                          mag;
     logic                                        o_vld;
+    logic                                        finish;
 
-    computing_cascade #(
+    AC_PH #(
         .W_WIDTH  (W_WIDTH),
         .X_WIDTH  (X_WIDTH),
         .S_WIDTH  (S_WIDTH),
@@ -34,13 +35,14 @@ module testbench;
         .x1            (x1    ),
         .x2            (x2    ),
 
-        .delta_ph (delta_ph),
-        .mag  (mag),
-        .o_vld    (o_vld)
+        .ph (delta_ph),
+        .ac  (mag),
+        .o_vld    (o_vld),
+        .finish   (finish)
     );
 
     initial begin
-        $dumpfile("computing_cascade.vcd");
+        $dumpfile("AC_PH.vcd");
         $dumpvars;
     end
     // Запись значений в веса

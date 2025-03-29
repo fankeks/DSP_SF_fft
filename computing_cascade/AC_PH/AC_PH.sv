@@ -1,15 +1,12 @@
-`include ".\\fft\\RAM_fft\\RAM_w_re.sv"
-`include ".\\fft\\RAM_fft\\RAM_w_im.sv"
-`include ".\\fft\\serial_fft_coral\\serial_fft_coral.sv"
-`include ".\\postprocess\\round\\round.sv"
-`include ".\\postprocess\\dec_to_polar_fsm\\dec_to_polar_fsm.sv"
-`include ".\\postprocess\\RAM_angle\\RAM_angle.sv"
-`include ".\\postprocess\\fifo_valid_ready\\flip_flop_fifo_empty_full_optimized.sv"
-`include ".\\postprocess\\fifo_valid_ready\\ff_fifo_wrapped_in_valid_ready.sv"
-`include ".\\postprocess\\fix_point_div\\fix_point_div.sv"
+`include ".\\AC_PH\\fft\\RAM_fft\\RAM_w_re.sv"
+`include ".\\AC_PH\\fft\\RAM_fft\\RAM_w_im.sv"
+`include ".\\AC_PH\\fft\\serial_fft_coral\\serial_fft_coral.sv"
+`include ".\\AC_PH\\postprocess\\round\\round.sv"
+`include ".\\AC_PH\\postprocess\\dec_to_polar_fsm\\dec_to_polar_fsm.sv"
+`include ".\\AC_PH\\postprocess\\RAM_angle\\RAM_angle.sv"
 
 
-module computing_cascade
+module AC_PH
 #(
     // FFT
     parameter FRAME_LENGTH = 360,
@@ -28,10 +25,10 @@ module computing_cascade
     input logic [X_WIDTH-1:0] x1,
     input logic [X_WIDTH-1:0] x2,
 
-    output logic [$clog2(FRAME_LENGTH) - 1:0] cnt,
+    output logic finish,
 
-    output logic [31:0] mag,
-    output logic signed [31:0] delta_ph,
+    output logic [31:0] ac,
+    output logic signed [31:0] ph,
     output logic o_vld
 );
     //#############################################################
@@ -42,6 +39,7 @@ module computing_cascade
     logic signed [CHANELS-1:0][S_WIDTH-1:0] re;
     logic signed [CHANELS-1:0][S_WIDTH-1:0] im;
     logic valid_fft;
+    logic [$clog2(FRAME_LENGTH) - 1:0] cnt;
 
     RAM_w_re #(
         .WIDTH(W_WIDTH),
@@ -79,7 +77,8 @@ module computing_cascade
 
         .re        (re              ),
         .im        (im              ),
-        .valid_o   (valid_fft )
+        .valid_o   (valid_fft       ),
+        .finish    (finish          )
     );
 
     //#######################################################################
@@ -211,8 +210,8 @@ module computing_cascade
     //#############################################################################################
     // Расчёт дельты
 
-    assign delta_ph = o_phase1 - o_phase2;
-    assign mag = o_mag2;
+    assign ph = o_phase1 - o_phase2;
+    assign ac = o_mag2;
     assign o_vld = to_polar_vld;
     
 endmodule
