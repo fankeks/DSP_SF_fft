@@ -1,0 +1,3 @@
+VCD info: dumpfile serial_fft_fsm.vcd opened for output.
+VCD warning: $dumpvars: Package ($unit) is not dumpable with VCD.
+serial_fft_fsm\testbench.sv:862: $finish called at 7410000 (1ps)
