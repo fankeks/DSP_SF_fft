@@ -4,7 +4,8 @@ module testbench;
     // Подключение
     localparam WIDTH  = 32;
     localparam DEPTH_WIDTH  = 33;
-    localparam N = 1;
+    localparam N = 2;
+    localparam SIG = 1;
 
     logic                                        clk;
     logic                                        arstn;
@@ -18,7 +19,8 @@ module testbench;
     mean #(
         .WIDTH  (WIDTH),
         .DEPTH_WIDTH  (DEPTH_WIDTH),
-        .N (N)
+        .N (N),
+        .SIG(SIG)
     ) m (
         .clk         (clk   ),
         .rstn       (arstn ),
@@ -67,7 +69,7 @@ module testbench;
         i_data <= 'd1;
 
         @(posedge clk);
-        i_data <= 'd2;
+        i_data <= -'d2;
 
         @(posedge clk);
         i_data <= 'd3;
@@ -75,6 +77,11 @@ module testbench;
         @(posedge clk);
         i_data <= 'd4;
 
+        @(posedge clk);
+        @(posedge clk);
+        @(posedge clk);
+        @(posedge clk);
+        @(posedge clk);
         @(posedge clk);
         @(posedge clk);
         @(posedge clk);

@@ -1,5 +1,5 @@
 $date
-	Sat Mar 29 12:08:01 2025
+	Sat Mar 29 13:47:47 2025
 $end
 $version
 	Icarus Verilog
@@ -9,156 +9,405 @@ $timescale
 $end
 $scope module testbench $end
 $var wire 1 ! o_vld $end
-$var wire 32 " o_data [31:0] $end
-$var reg 1 # arstn $end
-$var reg 1 $ clk $end
-$var reg 32 % i_data [31:0] $end
-$var reg 1 & i_vld $end
-$scope module m $end
-$var wire 1 $ clk $end
-$var wire 32 ' i_data [31:0] $end
-$var wire 1 & i_vld $end
-$var wire 1 # rstn $end
-$var wire 1 ( rstn_sum $end
-$var wire 32 ) o_data [31:0] $end
-$var wire 1 * enable $end
-$var reg 1 + cnt $end
-$var reg 1 ! o_vld $end
-$var reg 33 , sum [32:0] $end
+$var wire 32 " o_ph [31:0] $end
+$var wire 32 # o_ac [31:0] $end
+$var reg 2 $ addres [1:0] $end
+$var reg 1 % arstn $end
+$var reg 1 & clk $end
+$var reg 32 ' i_ac [31:0] $end
+$var reg 32 ( i_ph [31:0] $end
+$var reg 1 ) i_vld $end
+$scope module test $end
+$var wire 2 * addres [1:0] $end
+$var wire 1 & clk $end
+$var wire 32 + i_ac [31:0] $end
+$var wire 32 , i_ph [31:0] $end
+$var wire 1 ) i_vld $end
+$var wire 1 % rstn $end
+$var wire 4 - res_vld [3:0] $end
+$var wire 128 . res_ph [127:0] $end
+$var wire 128 / res_ac [127:0] $end
+$var wire 1 ! o_vld $end
+$var reg 4 0 inds [3:0] $end
+$var reg 32 1 o_ac [31:0] $end
+$var reg 32 2 o_ph [31:0] $end
+$scope begin CHANEL[0] $end
+$scope module m_ac $end
+$var wire 1 & clk $end
+$var wire 32 3 i_data [31:0] $end
+$var wire 1 4 i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 5 rstn_sum $end
+$var wire 32 6 o_data [31:0] $end
+$var wire 1 7 enable $end
+$var reg 2 8 cnt [1:0] $end
+$var reg 1 9 o_vld $end
+$var reg 33 : sum [32:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$upscope $end
+$scope module m_ph $end
+$var wire 1 & clk $end
+$var wire 32 ; i_data [31:0] $end
+$var wire 1 < i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 = rstn_sum $end
+$var wire 32 > o_data [31:0] $end
+$var wire 1 ? enable $end
+$var reg 2 @ cnt [1:0] $end
+$var reg 1 A o_vld $end
+$var reg 33 B sum [32:0] $end
+$scope begin genblk2 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin CHANEL[1] $end
+$scope module m_ac $end
+$var wire 1 & clk $end
+$var wire 32 C i_data [31:0] $end
+$var wire 1 D i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 E rstn_sum $end
+$var wire 32 F o_data [31:0] $end
+$var wire 1 G enable $end
+$var reg 2 H cnt [1:0] $end
+$var reg 1 I o_vld $end
+$var reg 33 J sum [32:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$upscope $end
+$scope module m_ph $end
+$var wire 1 & clk $end
+$var wire 32 K i_data [31:0] $end
+$var wire 1 L i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 M rstn_sum $end
+$var wire 32 N o_data [31:0] $end
+$var wire 1 O enable $end
+$var reg 2 P cnt [1:0] $end
+$var reg 1 Q o_vld $end
+$var reg 33 R sum [32:0] $end
+$scope begin genblk2 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin CHANEL[2] $end
+$scope module m_ac $end
+$var wire 1 & clk $end
+$var wire 32 S i_data [31:0] $end
+$var wire 1 T i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 U rstn_sum $end
+$var wire 32 V o_data [31:0] $end
+$var wire 1 W enable $end
+$var reg 2 X cnt [1:0] $end
+$var reg 1 Y o_vld $end
+$var reg 33 Z sum [32:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$upscope $end
+$scope module m_ph $end
+$var wire 1 & clk $end
+$var wire 32 [ i_data [31:0] $end
+$var wire 1 \ i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 ] rstn_sum $end
+$var wire 32 ^ o_data [31:0] $end
+$var wire 1 _ enable $end
+$var reg 2 ` cnt [1:0] $end
+$var reg 1 a o_vld $end
+$var reg 33 b sum [32:0] $end
+$scope begin genblk2 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin CHANEL[3] $end
+$scope module m_ac $end
+$var wire 1 & clk $end
+$var wire 32 c i_data [31:0] $end
+$var wire 1 d i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 e rstn_sum $end
+$var wire 32 f o_data [31:0] $end
+$var wire 1 g enable $end
+$var reg 2 h cnt [1:0] $end
+$var reg 1 i o_vld $end
+$var reg 33 j sum [32:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$upscope $end
+$scope module m_ph $end
+$var wire 1 & clk $end
+$var wire 32 k i_data [31:0] $end
+$var wire 1 l i_vld $end
+$var wire 1 % rstn $end
+$var wire 1 m rstn_sum $end
+$var wire 32 n o_data [31:0] $end
+$var wire 1 o enable $end
+$var reg 2 p cnt [1:0] $end
+$var reg 1 q o_vld $end
+$var reg 33 r sum [32:0] $end
+$scope begin genblk2 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 s i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$var integer 32 t i [31:0] $end
+$upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
+b100 t
+b100 s
+bx r
+xq
+bx p
+xo
+bx n
+xm
+xl
+bx k
+bx j
+xi
+bx h
+xg
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx f
+xe
+xd
+bx c
+bx b
+xa
+bx `
+x_
+bx ^
+x]
+x\
+bx [
+bx Z
+xY
+bx X
+xW
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx V
+xU
+xT
+bx S
+bx R
+xQ
+bx P
+xO
+bx N
+xM
+xL
+bx K
+bx J
+xI
+bx H
+xG
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx F
+xE
+xD
+bx C
+bx B
+xA
+bx @
+x?
+bx >
+x=
+x<
+bx ;
+bx :
+x9
+bx 8
+x7
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 6
+x5
+x4
+bx 3
+b0 2
+b0 1
+bx 0
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /
+bx .
+bx -
 bx ,
-x+
-x*
-bx )
-x(
+bx +
+bx *
+0)
+bx (
 bx '
 0&
-bx %
-0$
-0#
-bx "
+0%
+bx $
+b0 #
+b0 "
 x!
 $end
 #10000
-0*
-0(
-0+
+b100 s
+b100 t
+07
+05
+b0 8
 0!
-1$
-#20000
-0$
-#30000
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx "
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx )
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ,
-1$
-#40000
-0$
-#50000
-1#
-1$
-#60000
-0$
-#70000
-1$
-#80000
-0$
-#90000
-b1 %
-b1 '
+09
+0?
+0=
+b0 @
+0A
+0G
+0E
+b0 H
+0I
+0O
+0M
+b0 P
+0Q
+0W
+0U
+b0 X
+0Y
+0_
+0]
+b0 `
+0a
+0g
+0e
+b0 h
+b0 -
+0i
+0o
+0m
+b0 p
+0q
 1&
-1$
-#100000
-0$
-#110000
-b0 "
-b0 )
+#20000
+0&
+#30000
+b100 s
+b100 t
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx f
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx V
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx F
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 6
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx j
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Z
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx J
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx :
+1&
+#40000
+0&
+#50000
+1%
+1&
+#60000
+0&
+#70000
+1&
+#80000
+0&
+#90000
+0d
+0l
+0T
+0\
+0D
+0L
+14
+1<
+b1 0
+b100 s
+b1 (
 b1 ,
-1*
-1(
-1+
-b10 %
-b10 '
-1$
+b1 ;
+b1 K
+b1 [
+b1 k
+b1 '
+b1 +
+b1 3
+b1 C
+b1 S
+b1 c
+b0 $
+b0 *
+1)
+1&
+#100000
+0&
+#110000
+b100 s
+b100 t
+b0 n
+b0 f
+b0 ^
+b0 V
+b0 N
+b0 F
+b0 .
+b0 >
+b0 /
+b0 6
+b1 r
+b1 j
+b1 b
+b1 Z
+b1 R
+b1 J
+1=
+b1 @
+b1 B
+15
+b1 8
+b1 :
+1&
 #120000
-0$
+0&
 #130000
-b1 "
-b1 )
-b11 %
-b11 '
-0*
-0(
-0+
-b11 ,
-1!
-1$
+b10 :
+b10 8
+b10 B
+b10 @
+1&
 #140000
-0$
+0&
 #150000
-0!
-1*
-1(
-1+
-b100 %
-b100 '
-1$
+1?
+b11 @
+b11 B
+17
+b11 8
+b11 :
+1&
 #160000
-0$
+0&
 #170000
-b11 "
-b11 )
-0*
-0(
-0+
-b111 ,
+b0 "
+b0 2
+b0 #
+b0 1
+b1 /
+b1 6
+b1 .
+b1 >
+b100 s
+b100 t
+0)
+b100 :
+07
+05
+b0 8
 1!
-1$
-#180000
-0$
-#190000
-b10 "
-b10 )
-0!
-b100 ,
-1*
-1(
-1+
-1$
-#200000
-0$
-#210000
-b100 "
-b100 )
-0*
-0(
-0+
-b1000 ,
-1!
-1$
-#220000
-0$
-#230000
-b10 "
-b10 )
-0!
-b100 ,
-1*
-1(
-1+
-1$
-#240000
-0$
-#250000
-b100 "
-b100 )
-0*
-0(
-0+
-b1000 ,
-1!
-1$
+b1 -
+19
+b100 B
+0?
+0=
+b0 @
+1A
+1&

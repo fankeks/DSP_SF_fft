@@ -2,7 +2,8 @@ module mean
 #(
     parameter WIDTH = 32,
     parameter DEPTH_WIDTH = 33,
-    parameter N = 1            // Количество эллементов (степень двойки)
+    parameter N = 1,             // Количество эллементов (степень двойки)
+    parameter SIG = 0
 ) 
 (
     input logic clk,
@@ -29,17 +30,27 @@ module mean
     logic [DEPTH_WIDTH-1:0] sum;
     logic rstn_sum;
     assign rstn_sum = |cnt;
-    always_ff @(posedge clk) begin
-        if(~rstn_sum)   sum <= i_data;
-        else if (i_vld) sum <= sum + i_data;
-    end
+    generate
+        if (SIG == 0) begin
+            always_ff @(posedge clk) begin
+                if(~rstn_sum)   sum <= i_data;
+                else if (i_vld) sum <= sum + i_data;
+            end
+            assign o_data = sum >> N;
+        end
+        else begin
+            always_ff @(posedge clk) begin
+                if(~rstn_sum)   sum <= {{(DEPTH_WIDTH-WIDTH){i_data[WIDTH-1]}}, i_data};
+                else if (i_vld) sum <= sum + {{(DEPTH_WIDTH-WIDTH){i_data[WIDTH-1]}}, i_data};
+            end
+            assign o_data = {{(N){sum[DEPTH_WIDTH-1]}}, sum[DEPTH_WIDTH-1:N]};
+        end
+    endgenerate
 
     always_ff @(posedge clk) begin
         if (!rstn)       o_vld <= 'b0;
         else if (enable) o_vld <= i_vld;
         else             o_vld <= 'b0;
     end
-
-    assign o_data = sum >> N;
     
 endmodule
