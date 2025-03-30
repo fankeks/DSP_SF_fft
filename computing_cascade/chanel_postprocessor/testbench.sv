@@ -16,7 +16,7 @@ module testbench;
     logic                                        o_vld;
     logic [WIDTH-1:0]                   o_data;
 
-    mean #(
+    chanel_postprocessor #(
         .WIDTH  (WIDTH),
         .DEPTH_WIDTH  (DEPTH_WIDTH),
         .N (N),

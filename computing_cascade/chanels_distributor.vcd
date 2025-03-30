@@ -1,5 +1,5 @@
 $date
-	Sat Mar 29 14:39:50 2025
+	Sun Mar 30 11:11:17 2025
 $end
 $version
 	Icarus Verilog
@@ -44,7 +44,7 @@ $var wire 32 8 o_data [31:0] $end
 $var wire 1 9 enable $end
 $var reg 2 : cnt [1:0] $end
 $var reg 1 ; o_vld $end
-$var reg 33 < sum [32:0] $end
+$var reg 36 < sum [35:0] $end
 $scope begin genblk1 $end
 $upscope $end
 $upscope $end
@@ -58,7 +58,7 @@ $var wire 32 @ o_data [31:0] $end
 $var wire 1 A enable $end
 $var reg 2 B cnt [1:0] $end
 $var reg 1 C o_vld $end
-$var reg 33 D sum [32:0] $end
+$var reg 36 D sum [35:0] $end
 $scope begin genblk2 $end
 $upscope $end
 $upscope $end
@@ -74,7 +74,7 @@ $var wire 32 H o_data [31:0] $end
 $var wire 1 I enable $end
 $var reg 2 J cnt [1:0] $end
 $var reg 1 K o_vld $end
-$var reg 33 L sum [32:0] $end
+$var reg 36 L sum [35:0] $end
 $scope begin genblk1 $end
 $upscope $end
 $upscope $end
@@ -88,7 +88,7 @@ $var wire 32 P o_data [31:0] $end
 $var wire 1 Q enable $end
 $var reg 2 R cnt [1:0] $end
 $var reg 1 S o_vld $end
-$var reg 33 T sum [32:0] $end
+$var reg 36 T sum [35:0] $end
 $scope begin genblk2 $end
 $upscope $end
 $upscope $end
@@ -104,7 +104,7 @@ $var wire 32 X o_data [31:0] $end
 $var wire 1 Y enable $end
 $var reg 2 Z cnt [1:0] $end
 $var reg 1 [ o_vld $end
-$var reg 33 \ sum [32:0] $end
+$var reg 36 \ sum [35:0] $end
 $scope begin genblk1 $end
 $upscope $end
 $upscope $end
@@ -118,7 +118,7 @@ $var wire 32 ` o_data [31:0] $end
 $var wire 1 a enable $end
 $var reg 2 b cnt [1:0] $end
 $var reg 1 c o_vld $end
-$var reg 33 d sum [32:0] $end
+$var reg 36 d sum [35:0] $end
 $scope begin genblk2 $end
 $upscope $end
 $upscope $end
@@ -134,7 +134,7 @@ $var wire 32 h o_data [31:0] $end
 $var wire 1 i enable $end
 $var reg 2 j cnt [1:0] $end
 $var reg 1 k o_vld $end
-$var reg 33 l sum [32:0] $end
+$var reg 36 l sum [35:0] $end
 $scope begin genblk1 $end
 $upscope $end
 $upscope $end
@@ -148,7 +148,7 @@ $var wire 32 p o_data [31:0] $end
 $var wire 1 q enable $end
 $var reg 2 r cnt [1:0] $end
 $var reg 1 s o_vld $end
-$var reg 33 t sum [32:0] $end
+$var reg 36 t sum [35:0] $end
 $scope begin genblk2 $end
 $upscope $end
 $upscope $end
@@ -168,7 +168,7 @@ $enddefinitions $end
 #0
 $dumpvars
 b0 w
-b100 v
+b0 v
 b100 u
 bx t
 xs
@@ -182,7 +182,7 @@ bx l
 xk
 bx j
 xi
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx h
+bx h
 xg
 0f
 bx e
@@ -198,7 +198,7 @@ bx \
 x[
 bx Z
 xY
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx X
+bx X
 xW
 0V
 bx U
@@ -214,7 +214,7 @@ bx L
 xK
 bx J
 xI
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx H
+bx H
 xG
 0F
 bx E
@@ -230,7 +230,7 @@ bx <
 x;
 bx :
 x9
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 8
+bx 8
 x7
 06
 bx 5
@@ -238,7 +238,7 @@ bx 4
 bx 3
 bx 2
 b1 1
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 0
+bx 0
 bx /
 bx .
 bx -
@@ -666,7 +666,7 @@ b100 1
 b100 u
 b101 <
 0;
-b111111111111111111111111111111111 D
+b111111111111111111111111111111111111 D
 0C
 b1110 L
 0I
@@ -714,7 +714,7 @@ b10 d
 b0 Z
 b1110 \
 0S
-b111111111111111111111111111111111 T
+b111111111111111111111111111111111111 T
 1!
 b100 .
 0K
@@ -738,7 +738,7 @@ b100 v
 0n
 b101 \
 0[
-b111111111111111111111111111111111 d
+b111111111111111111111111111111111111 d
 0c
 b1110 l
 0i
@@ -762,7 +762,7 @@ b1000000000000000000000000000000010000000000000000000000000000000100000000000000
 b1 h
 b100 v
 0s
-b111111111111111111111111111111111 t
+b111111111111111111111111111111111111 t
 0!
 b0 .
 0k

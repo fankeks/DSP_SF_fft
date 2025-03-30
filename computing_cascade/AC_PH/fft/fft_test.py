@@ -5,7 +5,7 @@ import os
 def my_fft(x, N, k, factor):
     w_re = np.cos(np.pi * 2 * k / N) * factor
     print(w_re)
-    w_im = np.sin(2 * np.pi * k / N) * factor
+    w_im = np.int64(round(np.sin(2 * np.pi * k / N) * factor))
     print(w_im)
 
     s = [x[0] * factor, 0, 0]
@@ -14,8 +14,8 @@ def my_fft(x, N, k, factor):
         s[1] = s[0]
         s[0] = w_re * 2 * s[1] / factor - s[2] + x[i] * factor
         #print(s)
-    re = s[0] * w_re / factor - s[1]
-    im = s[0] * w_im / factor
+    re = round(s[0] * w_re / factor) - s[1]
+    im = round(s[0] * w_im / factor)
     return re, im
 
 

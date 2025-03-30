@@ -1,4 +1,4 @@
-`include ".\mean\mean.sv"
+`include ".\\\chanel_postprocessor\\chanel_postprocessor.sv"
 
 
 module chanels_distributor
@@ -35,9 +35,9 @@ module chanels_distributor
     genvar i;
     generate
         for (i = 0; i<CHANELS; i++) begin : CHANEL
-            mean #(
+            chanel_postprocessor #(
                 .WIDTH  (32),
-                .DEPTH_WIDTH  (33),
+                .DEPTH_WIDTH  (32 + (1 << STADIES)),
                 .N (STADIES)
             ) m_ac (
                 .clk         (clk   ),
@@ -50,9 +50,9 @@ module chanels_distributor
                 .o_data      (res_ac[i])
             );
 
-            mean #(
+            chanel_postprocessor #(
                 .WIDTH  (32),
-                .DEPTH_WIDTH  (33),
+                .DEPTH_WIDTH  (32 + (1 << STADIES)),
                 .N (STADIES),
                 .SIG(1)
             ) m_ph (
