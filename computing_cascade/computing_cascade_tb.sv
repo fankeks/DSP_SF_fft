@@ -25,6 +25,17 @@ module testbench;
     logic signed [31:0]                          delta_ph;
     logic        [31:0]                          mag;
     logic                                        o_vld;
+    
+    logic finish;
+    logic address_registration_en;
+    assign address_registration_en = address_registration == CHANELS-1;
+    always_ff @(posedge clk) begin
+        if (!rstn)                       address_registration <= 'b0;
+        else if (finish) begin
+            if (address_registration_en) address_registration <= 'b0;
+            else                         address_registration <= address_registration + 'b1;
+        end
+    end
 
     computing_cascade #(
         .CHANELS(CHANELS),
@@ -44,6 +55,7 @@ module testbench;
         .x1            (x1    ),
         .x2            (x2    ),
 
+        .ac_ph_finish(finish),
         .address_registration(address_registration),
         .address_output (address_output),
 

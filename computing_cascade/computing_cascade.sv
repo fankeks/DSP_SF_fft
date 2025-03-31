@@ -26,7 +26,8 @@ module computing_cascade
     input logic [X_WIDTH-1:0] x1,
     input logic [X_WIDTH-1:0] x2,
 
-    output logic [$clog2(CHANELS)-1:0] address_registration,
+    output logic ac_ph_finish,
+    input  logic [$clog2(CHANELS)-1:0] address_registration,
     output logic [$clog2(CHANELS)-1:0] address_output,
 
     output logic [31:0] ac,
@@ -37,7 +38,7 @@ module computing_cascade
     logic        [31:0] ac_chanel;
     logic signed [31:0] ph_chanel;
     logic               ac_ph_vld;
-    logic               ac_ph_finish;
+    //logic               ac_ph_finish;
     AC_PH #(
         .W_WIDTH      (W_WIDTH),
         .X_WIDTH      (X_WIDTH),
@@ -59,15 +60,15 @@ module computing_cascade
         .finish       (ac_ph_finish)
     );
 
-    logic address_registration_en;
-    assign address_registration_en = address_registration == CHANELS-1;
-    always_ff @(posedge clk) begin
-        if (!rstn)                       address_registration <= 'b0;
-        else if (ac_ph_finish) begin
-            if (address_registration_en) address_registration <= 'b0;
-            else                         address_registration <= address_registration + 'b1;
-        end
-    end
+    // logic address_registration_en;
+    // assign address_registration_en = address_registration == CHANELS-1;
+    // always_ff @(posedge clk) begin
+    //     if (!rstn)                       address_registration <= 'b0;
+    //     else if (ac_ph_finish) begin
+    //         if (address_registration_en) address_registration <= 'b0;
+    //         else                         address_registration <= address_registration + 'b1;
+    //     end
+    // end
 
     logic                       fifo_vld;
     logic [$clog2(CHANELS)-1:0] down_address;

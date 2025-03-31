@@ -68,8 +68,10 @@ module chanels_distributor
     endgenerate
 
     // MUX res
-    // Syntes latch
     always @ (*) begin
+        o_ac = 'b0;
+        o_ph = 'b0;
+        o_addres = 'b0;
         for (int j = 0; j < CHANELS; j++) begin 
             if (res_vld[j]) begin
                 o_ac = res_ac[j];
