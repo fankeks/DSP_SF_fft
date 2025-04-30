@@ -1,21 +1,24 @@
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 
 n = 360
 k = 356
-factor = 1024
+factor = 2 ** 14
 
 f = 25000
 #fs is sampling frequency
-fs = 2.2857 * 10 ** 6
+fs = 2.25 * 10 ** 6
 t = np.linspace(0, n * (1 / fs), n ,endpoint=False)
 y = (np.sin(2*np.pi *f * t) + 1) / 2 * (2 ** 12-1)
 #print(y)
 y = np.array(y, dtype=np.int16)
 fft_wave = np.fft.fft(y)
 
-#k = np.argmax(np.abs(fft_wave))
+plt.plot(np.abs(fft_wave[len(fft_wave)//2:]))
+plt.show()
+k = np.argmax(np.abs(fft_wave[len(fft_wave)//2:])) + len(fft_wave)//2
 print(k)
 
 w_re = []
