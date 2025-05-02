@@ -16,29 +16,30 @@ module uart_tx_writer
     output logic tx
 );
     localparam scale = clk_mhz * 1000 * 1000 / boadrate;
+    localparam cnt_width = $clog2 (scale);
 
     // Описание состояний
     typedef enum bit { 
-        READY_TO_LOAD   = 1'b0, // Готовность загружать данные на отправку
-        OUTPUT = 1'b1           // Отправка данных
+        IDLE   = 1'b1,
+        OUTPUT = 1'b0
     } states;
     states state, next_state;
 
     always_ff @ (posedge clk) begin
         if (!rstn)
-            state <= READY_TO_LOAD;
+            state <= IDLE;
         else
             state <= next_state;
     end
 
     // Генераторы сигналов
-    logic [31:0] cnt;
+    logic [cnt_width-1:0] cnt;
     wire enable;
     logic [3:0] output_bit;
     wire output_stop_bit;
 
     always_ff @ (posedge clk) begin
-        if (!rstn | (state == READY_TO_LOAD))
+        if (!rstn | (state))
             cnt <= scale - 'b1;
         else
             if (enable)
@@ -46,10 +47,12 @@ module uart_tx_writer
             else
                 cnt <= cnt - 'b1;
     end
-    assign enable = (cnt == '0);
+    assign enable = !(|cnt);
+    wire en_output_to_idle;
+    assign en_output_to_idle = (cnt == 'b1);
 
     always_ff @ (posedge clk) begin
-        if (!rstn | (state == READY_TO_LOAD))
+        if (!rstn | (state))
             output_bit <= 'b0;
         else
             if (enable)
@@ -58,14 +61,14 @@ module uart_tx_writer
                 else
                     output_bit <= output_bit + 'b1;
     end
-    assign output_stop_bit = (output_bit >= 'd10);
+    assign output_stop_bit = (output_bit >= 'd9);
 
     // Описание переходов
     always_comb begin
         next_state = state;
         case (state)
-            READY_TO_LOAD    : if (valid) next_state = OUTPUT;
-            OUTPUT           : if (output_stop_bit) next_state = READY_TO_LOAD;
+            IDLE             : if (valid) next_state = OUTPUT;
+            OUTPUT           : if (output_stop_bit & en_output_to_idle) next_state = IDLE;
             default          : next_state = state;
         endcase
     end
@@ -75,17 +78,16 @@ module uart_tx_writer
     always_ff @ (posedge clk)
         if (valid & (ready))
             data_register <= data;
-    wire [10:0] data_output = {1'b1, 1'b1, data_register, 1'b0};
+    wire [9:0] data_output = {1'b1, data_register, 1'b0};
 
     // Логика формирования выходов
     always_comb begin
+        ready = state;
         case (state)
-            READY_TO_LOAD : begin 
-                                ready = 1'b1; 
+            IDLE :          begin 
                                 tx = 1'b1; 
                             end
             OUTPUT        : begin 
-                                ready = 'b0;
                                 tx = data_output[output_bit]; 
                             end
             default       : begin 

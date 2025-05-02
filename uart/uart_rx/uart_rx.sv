@@ -14,29 +14,30 @@ module uart_rx_writer
     output logic valid
 );
     localparam scale = clk_mhz * 1000 * 1000 / boadrate;
+    localparam cnt_width = $clog2 (scale);
 
     // Описание состояний
     typedef enum bit { 
-        WAIT   = 1'b0,
+        IDLE   = 1'b0,
         READ   = 1'b1
     } states;
     states state, next_state;
 
     always_ff @ (posedge clk) begin
         if (!rstn)
-            state <= WAIT;
+            state <= IDLE;
         else
             state <= next_state;
     end
 
     // Генераторы сигналов
-    logic [31:0] cnt;
+    logic [cnt_width+1:0] cnt;
     wire enable;
     logic [3:0] read_bit;
     wire read_stop_bit;
 
     always_ff @ (posedge clk) begin
-        if ((!rstn) | (state == WAIT))
+        if (!(rstn & state))
             cnt <= scale - 'b1 + scale / 2;
         else
             if (enable)
@@ -44,24 +45,26 @@ module uart_rx_writer
             else
                 cnt <= cnt - 'b1;
     end
-    assign enable = (cnt == '0);
+    assign enable = !(|cnt);
 
     always_ff @ (posedge clk) begin
-        if ((!rstn) | (state == WAIT))
+        if (!(rstn & state))
             read_bit <= '0;
         else
             if (enable)
-                if (read_stop_bit) read_bit <= '0;
+                if (read_stop_bit) read_bit <= 'b0;
                 else               read_bit <= read_bit + 'b1;
     end
-    assign read_stop_bit = (read_bit >= 'd9);
+    assign read_stop_bit = (read_bit >= 'd8);
+    wire read_last_significant_bit;
+    assign read_last_significant_bit = (read_bit == 'd7);
 
     // Описание переходов
     always_comb begin
         next_state = state;
         case (state)
-            WAIT             : if (~rx) next_state = READ;
-            READ             : if (read_stop_bit) next_state = WAIT;
+            IDLE             : if (~rx) next_state = READ;
+            READ             : if (read_stop_bit & enable) next_state = IDLE;
             default          : next_state = state;
         endcase
     end
@@ -69,16 +72,17 @@ module uart_rx_writer
     // Сохранение значения
     logic [7:0] parallel_data;
     always_ff @ (posedge clk) begin
-        if  (enable)
-                parallel_data[read_bit] <= rx;
+        if  (enable) begin
+            valid <= read_last_significant_bit;
+            parallel_data[read_bit] <= rx;
+        end
+        else
+           valid <= 'b0;
     end
 
     // Логика формирования выходов
-    logic valid_reg;
-    always_ff @(posedge clk) begin
-        valid_reg <= read_stop_bit;
-    end
-    assign valid = !valid_reg & read_stop_bit;
+    
+    //assign valid = enable & read_last_significant_bit;
     assign data = parallel_data;
 endmodule
 
