@@ -37,6 +37,32 @@ def send(ser:serial.Serial, ys):
     return fpga_AC, fpga_PH
 
 
+def send_sig(ser:serial.Serial, ys):
+    for i in range(len(ys[0])):
+        value = ys[0][i]
+        value &= np.uint16(65535)
+        value |= np.uint32(ys[1][i]) << 16
+        value_out = int(value).to_bytes(4, 'big')
+        ser.write(value_out)
+
+
+def read_data(ser:serial.Serial):
+    data = []
+    res = np.uint32(ord(ser.read()))
+    res |= np.uint32(ord(ser.read())) << 8
+    res |= np.uint32(ord(ser.read())) << 16
+    res |= np.uint32(ord(ser.read())) << 24
+    data.append(np.float64(np.int32(res)))
+
+    res = np.uint32(ord(ser.read()))
+    res |= np.uint32(ord(ser.read())) << 8
+    res |= np.uint32(ord(ser.read())) << 16
+    res |= np.uint32(ord(ser.read())) << 24
+    data.append(np.float64(np.int32(res)))
+
+    return data
+
+
 def main():
     ser = serial.Serial(
         port='COM3',

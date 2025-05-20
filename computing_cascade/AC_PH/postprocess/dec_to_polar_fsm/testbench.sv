@@ -16,7 +16,7 @@ module test;
     logic o_vld;
     logic ready;
 
-    localparam NSTAGES = 16;
+    localparam NSTAGES = 4;
     logic [$clog2(NSTAGES)-1:0] cnt;
 	logic signed [31:0] cordic_angle;
     RAM_angle
@@ -29,7 +29,10 @@ module test;
         .data_out (cordic_angle)
     );
 
-    dec_to_polar_fsm tp (
+    dec_to_polar_fsm
+    #(
+        .NSTAGES(NSTAGES)
+    ) tp (
         .clk           (clk),
         .rstn         (arstn),
 

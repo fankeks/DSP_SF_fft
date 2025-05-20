@@ -1,14 +1,14 @@
 module testbench;
     // Подключение
     localparam CHANELS = 4;
-    localparam MEAN_STEPS = 0;
+    localparam MEAN_STEPS = 1;
 
     localparam W_WIDTH  = 16;
     localparam X_WIDTH  = 16;
     localparam S_WIDTH  = 38;
-    localparam FRAME_LENGTH = 22;
+    localparam FRAME_LENGTH = 5;
 
-    localparam NSTAGES = 20;
+    localparam NSTAGES = 4;
 
     logic [31:0] GLOBAL_COUNTER;
 

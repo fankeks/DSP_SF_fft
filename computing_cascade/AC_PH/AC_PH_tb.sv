@@ -3,8 +3,8 @@ module testbench;
     localparam W_WIDTH  = 16;
     localparam X_WIDTH  = 16;
     localparam S_WIDTH  = 38;
-    localparam FRAME_LENGTH = 22;
-    localparam NSTAGES = 21;
+    localparam FRAME_LENGTH = 5;
+    localparam NSTAGES = 4;
 
     logic [31:0] GLOBAL_COUNTER;
 

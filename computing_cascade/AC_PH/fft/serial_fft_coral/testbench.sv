@@ -89,12 +89,16 @@ module testbench;
 
     logic signed [CHANELS-1:0][S_WIDTH-1:0]      re;
     logic signed [S_WIDTH-1:0] re1;
+    logic signed [S_WIDTH-1:0] re2;
     logic signed [CHANELS-1:0][S_WIDTH-1:0]      im;
     logic signed [S_WIDTH-1:0] im1;
+    logic signed [S_WIDTH-1:0] im2;
     logic                                        valid_o;
     logic                                        finish;
     assign re1 = re[0];
     assign im1 = im[0];
+    assign re2 = re[1];
+    assign im2 = im[1];
 
     a #(
         .W_WIDTH  (W_WIDTH),
@@ -147,6 +151,24 @@ module testbench;
         @(posedge clk);
     //---------------------------------------------------------------------------------------------
         //1
+        @(posedge clk);
+        valid_i <= 'b1;
+        x1 <= 'd1;
+        x2 <= 'd2;
+
+        @(posedge clk);
+        x1 <= 'd3;
+        x2 <= 'd4;
+
+        @(posedge clk);
+        x1 <= 'd5;
+        x2 <= 'd6;
+
+        @(posedge clk);
+        x1 <= 'd7;
+        x2 <= 'd8;
+
+        //2
         @(posedge clk);
         valid_i <= 'b1;
         x1 <= 'd1;

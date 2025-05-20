@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import serial
 from tqdm import tqdm
+import pandas as pd
 
 
 def generate_PH(f, t):
@@ -61,7 +62,7 @@ def generate(chanels, frame_length, n):
     ys = []
     ACs = []
     PHs = []
-    diap_A = [80, 2**12-1]
+    diap_A = [128, 2**12-1]
     diap_PH = [0, 2 * np.pi]
     for i in range(chanels):
         # y1
@@ -69,7 +70,7 @@ def generate(chanels, frame_length, n):
         PH1_t = np.array([1] * len(t), dtype=np.uint16) * PH1
 
         A1 = np.random.uniform(diap_A[0], diap_A[1], 1)[0]
-        A1_t = np.array([1] * len(t), dtype=np.uint16) * A1
+        A1_t = np.array([1] * len(t), dtype=np.float64) * A1
 
         y1 = (np.sin(2*np.pi *f * t + PH1_t) + 1) / 2 * A1_t
         y1 += (1/5) * A1_t * (np.sin(2 * np.pi * 2 * f * t + PH1_t) + 1) / 2  # Second harmonic
@@ -81,7 +82,7 @@ def generate(chanels, frame_length, n):
 
         # y2
         PH2 = np.random.uniform(0, 1.99* np.pi, 1)[0]
-        PH2_t = np.array([1] * len(t), dtype=np.uint16) * (PH1 + PH2)
+        PH2_t = np.array([1] * len(t), dtype=np.float64) * (PH1 + PH2)
         y2 = (np.sin(2*np.pi *f * t + PH2_t) + 1) / 2 * A1_t
     
         y2 += (1/5) * A1_t * (np.sin(2 * np.pi * 2 * f * t + PH2_t) + 1) / 2  # Second harmonic
@@ -99,8 +100,8 @@ def generate(chanels, frame_length, n):
         t_s = [np.array(t[i*frame_length:(i+1) * frame_length]) for i in range(n)]
         ys.append([y2_s, y1_s])
         ts.append(t_s)
-    # plt.plot(ys[0][0][0])
-    # plt.plot(ys[0][1][0])
+    # plt.plot(ts[0][0], ys[0][0][0])
+    # plt.plot(ts[0][0], ys[0][1][0])
     # plt.show()
     return ys, ACs, PHs, t, fs, f, ts
 
@@ -144,7 +145,7 @@ def send(ser, ys, chanels, frame_length, n):
         # fpga_AC_PH.append(np.int32(res))
 
         fpga_AC_PH = np.array(fpga_AC_PH, dtype=np.float64)
-        fpga_AC_PH[0] /= 2 ** 8
+        fpga_AC_PH[0] /= 2 ** 10
         fpga_AC_PH[0] *= 0.6072529350324679
         fpga_AC_PH[1] /= 2 ** (22)
         #fpga_AC_PH[2] /= 2 ** (22)
@@ -157,61 +158,89 @@ def send(ser, ys, chanels, frame_length, n):
 
 def main():
     ser = serial.Serial(
-        port='COM3',
-        baudrate=300000,
+        port='COM4',
+        baudrate=600000,
     )
 
     if not ser.isOpen():
         print('Not connect')
         return
+    
+    columns = []
+    columns.append(f"true AC1")
+    columns.append(f"fpga AC1")
+    columns.append(f"loss AC1")
+    columns.append(f"true PH1")
+    columns.append(f"fpga PH1")
+    columns.append(f"loss PH1")
+
+    columns.append(f"true AC2")
+    columns.append(f"fpga AC2")
+    columns.append(f"loss AC2")
+    columns.append(f"true PH2")
+    columns.append(f"fpga PH2")
+    columns.append(f"loss PH2")
+
+    columns.append(f"true AC3")
+    columns.append(f"fpga AC3")
+    columns.append(f"loss AC3")
+    columns.append(f"true PH3")
+    columns.append(f"fpga PH3")
+    columns.append(f"loss PH3")
+
+    columns.append(f"true AC4")
+    columns.append(f"fpga AC4")
+    columns.append(f"loss AC4")
+    columns.append(f"true PH4")
+    columns.append(f"fpga PH4")
+    columns.append(f"loss PH4")
+    
+
+    log_df = pd.DataFrame(columns=columns)
+    log_df.to_csv("log.csv", sep=";", index=False)
 
     loss_AC_m = []
     loss_PH_m = []
-    for _ in tqdm(range(1)):
+    for _ in tqdm(range(5000)):
         chanels = 4
-        frame_length = 360
-        n = 2
+        frame_length = 90
+        n = 8
         ys, ACs, PHs, t, fs, f, ts = generate(chanels, frame_length, n)
 
         fpga_AC_PH = send(ser, ys, chanels, frame_length, n)
+        data = []
         for chanel in range(chanels):
             fpga_AC = fpga_AC_PH[chanel][0] / (frame_length / 2) * 2# * 1.05
             true_AC = ACs[chanel]
-            #print(true_AC / fpga_AC)
-            #print(fpga_AC, true_AC)
 
             #print("Фаза")
             fpga_PH = fpga_AC_PH[chanel][1]# if fpga_AC_PH[chanel][1] > 0 else 360 + fpga_AC_PH[chanel][1]
+            
             #fpga_PH = fpga_PH if np.abs(fpga_PH) >= 0.7 else 0
             #fpga_PH = fpga_PH if np.abs(fpga_PH) <= 359.3 else 360 - fpga_PH
-            true_PH = (-PHs[chanel][0] + PHs[chanel][1]) / np.pi * 180
+            true_PH = (PHs[chanel][1] - PHs[chanel][0]) / np.pi * 180
             #print(true_PH - fpga_PH)
             #print(fpga_PH, true_PH)
             #print()
 
-            loss_AC = np.abs(fpga_AC - true_AC) / true_AC * 100
-            loss_PH = np.abs(true_PH - fpga_PH)
+            loss_AC = (fpga_AC - true_AC) / true_AC * 100
+            loss_PH = (true_PH - fpga_PH)
+            data.append(true_AC)
+            data.append(fpga_AC)
+            data.append(loss_AC)
+            data.append(true_PH)
+            data.append(fpga_PH)
+            data.append(loss_PH)
             if loss_AC >= 1.5 or loss_PH >= 1:
                 print()
-                print(loss_AC, loss_PH)
                 print(chanel)
-                print("delta")
-                print(fpga_AC, true_AC)
-                print(true_AC / fpga_AC)
-                print("fpga")
-                print(fpga_AC_PH[chanel])
-                print("cpu")
-                print(PHs[chanel][0]/np.pi * 180, PHs[chanel][1] / np.pi * 180)
-                print("fft")
-                print(np.abs(np.fft.fft(ys[chanel][1][0]))[356] / (frame_length / 2) * 2)
-                # print(np.angle(np.fft.fft(ys[chanel][0][0]), deg=True)[356])
-                # print(np.angle(np.fft.fft(ys[chanel][1][0]), deg=True)[356])
-                # print(np.angle(np.fft.fft(ys[chanel][0][0]), deg=True)[356] - np.angle(np.fft.fft(ys[chanel][1][0]), deg=True)[356])
-                # print(np.angle(np.fft.fft(ys[chanel][0][0]), deg=True)[356] - np.angle(np.fft.fft(ys[chanel][1][0]), deg=True)[356] + 360)
-                #break
-                print()
+                print(loss_AC, loss_PH)
+                print(PHs[chanel][1] / np.pi * 180, PHs[chanel][0] / np.pi * 180)
+                print(fpga_PH)
             loss_AC_m.append(loss_AC)
             loss_PH_m.append(loss_PH)
+        log_df = pd.DataFrame([data], columns=columns)
+        log_df.to_csv("log.csv", sep=";", index=False, mode='a', header=False)
     print(np.max(loss_AC_m), np.max(loss_PH_m))
 
 

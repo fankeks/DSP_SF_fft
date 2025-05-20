@@ -1,3 +1,5 @@
+//`include ".\\AC_PH\\postprocess\\round\\round.sv"
+
 module chanel_postprocessor
 #(
     parameter WIDTH = 32,
@@ -37,22 +39,36 @@ module chanel_postprocessor
                     if(~rstn_sum)   sum <= i_data;
                     else if (i_vld) sum <= sum + i_data;
                 end
-                assign o_data = sum >> N;
+                //assign o_data = sum >> N;
             end
             else begin
                 always_ff @(posedge clk) begin
                     if(~rstn_sum)   sum <= {{(DEPTH_WIDTH-WIDTH){i_data[WIDTH-1]}}, i_data};
                     else if (i_vld) sum <= sum + {{(DEPTH_WIDTH-WIDTH){i_data[WIDTH-1]}}, i_data};
                 end
-                assign o_data = {{(N){sum[DEPTH_WIDTH-1]}}, sum[DEPTH_WIDTH-1:N]};
+                //assign o_data = {{(N){sum[DEPTH_WIDTH-1]}}, sum[DEPTH_WIDTH-1:N]};
             end
             //-------------------------------------------------------------------------------------
-
+            logic o_vld_sum;
             always_ff @(posedge clk) begin
-                if (!rstn)       o_vld <= 'b0;
-                else if (enable) o_vld <= i_vld;
-                else             o_vld <= 'b0;
+                if (!rstn)       o_vld_sum <= 'b0;
+                else if (enable) o_vld_sum <= i_vld;
+                else             o_vld_sum <= 'b0;
             end
+            //-------------------------------------------------------------------------------------
+            round#(
+                .W_IN (DEPTH_WIDTH),
+                .W_OUT(DEPTH_WIDTH-N)
+            ) r (
+                .clk(clk),
+                .rstn(rstn),
+
+                .i_data(sum),
+                .i_vld(o_vld_sum),
+
+                .o_data(o_data),
+                .o_vld(o_vld)
+            );
         end
         else begin
             assign o_vld = i_vld;

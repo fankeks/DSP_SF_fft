@@ -37,7 +37,8 @@ module chanels_distributor
         for (i = 0; i<CHANELS; i++) begin : CHANEL
             chanel_postprocessor #(
                 .WIDTH  (32),
-                .DEPTH_WIDTH  (32 + (1 << STADIES)),
+                .DEPTH_WIDTH  (32 + (STADIES)),
+                //.DEPTH_WIDTH  (32 + (1 << STADIES)),
                 .N (STADIES)
             ) m_ac (
                 .clk         (clk   ),
@@ -52,7 +53,8 @@ module chanels_distributor
 
             chanel_postprocessor #(
                 .WIDTH  (32),
-                .DEPTH_WIDTH  (32 + (1 << STADIES)),
+                .DEPTH_WIDTH  (32 + (STADIES)),
+                //.DEPTH_WIDTH  (32 + (1 << STADIES)),
                 .N (STADIES),
                 .SIG(1)
             ) m_ph (
@@ -68,6 +70,7 @@ module chanels_distributor
     endgenerate
 
     // MUX res
+    // Syntes latch
     always @ (*) begin
         o_ac = 'b0;
         o_ph = 'b0;

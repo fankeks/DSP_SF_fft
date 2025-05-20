@@ -89,17 +89,17 @@ module dec_to_polar_fsm
 				2'b11:begin
 					xs  <= -i_y - i_x;
 					ys  <= i_x - i_y;
-					phs <= 32'hde40_0000;    //225 - 360
+					phs <= 32'h3840_0000;    //225 - 360
 				end
 				2'b10:begin
 					xs  <= i_x - i_y;
 					ys  <= i_x + i_y;
-					phs <= 32'hf4c0_0000;    //315 - 360
+					phs <= 32'h4ec0_0000;    //315 - 360
 				end
 				default: begin
 					xs  <= i_x + i_y;
 					ys  <= i_y - i_x;
-					phs <= 32'h0c90_fdaa;
+					phs <= 32'h0b40_0000;
 				end
 			endcase
 		end

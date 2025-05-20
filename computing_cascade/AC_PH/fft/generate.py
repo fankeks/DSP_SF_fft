@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-n = 360
+n = 90
 k = 356
 factor = 2 ** 14
 
@@ -19,7 +19,7 @@ fft_wave = np.fft.fft(y)
 plt.plot(np.abs(fft_wave[len(fft_wave)//2:]))
 plt.show()
 k = np.argmax(np.abs(fft_wave[len(fft_wave)//2:])) + len(fft_wave)//2
-print(k)
+print(k, f/fs*n)
 
 w_re = []
 w_im = []

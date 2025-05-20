@@ -4,7 +4,7 @@ module testbench;
     // Подключение
     localparam WIDTH  = 32;
     localparam CHANELS = 4;
-    localparam STADIES = 2;
+    localparam STADIES = 1;
 
     logic                               clk;
     logic                               arstn;
@@ -96,8 +96,39 @@ module testbench;
             i_ph   <= 'd2 - i;
         end
 
+        //2
+        for (int i=0; i < (1<<STADIES); i++) begin
+            @(posedge clk);
+            i_vld <= 'b1;
+            i_addres <= 'd0;
+            i_ac   <= 'd2 + 2*i;
+            i_ph   <= 'd2 - 3*i-5;
+
+            @(posedge clk);
+            i_vld <= 'b1;
+            i_addres <= 'd2;
+            i_ac   <= 'd2 + i;
+            i_ph   <= 'd2 - i;
+
+            @(posedge clk);
+            i_vld <= 'b1;
+            i_addres <= 'd0;
+            i_ac   <= 'd2 + i;
+            i_ph   <= 'd2 - i;
+
+            @(posedge clk);
+            i_vld <= 'b1;
+            i_addres <= 'd2;
+            i_ac   <= 'd2 + i;
+            i_ph   <= 'd2 - i;
+        end
+
         @(posedge clk);
         i_vld <= 'b0;
+        @(posedge clk);
+        @(posedge clk);
+        @(posedge clk);
+        @(posedge clk);
         @(posedge clk);
         @(posedge clk);
 

@@ -72,15 +72,15 @@ module uart_rx_writer
     // Сохранение значения
     logic [7:0] parallel_data;
     always_ff @ (posedge clk) begin
-        if  (enable) begin
-            valid <= read_last_significant_bit;
-            parallel_data[read_bit] <= rx;
-        end
-        else
-           valid <= 'b0;
+        if (enable) parallel_data[read_bit] <= rx;
     end
 
     // Логика формирования выходов
+    always_ff @(posedge clk) begin
+        if (!rstn)       valid <= 'b0;
+        else if (enable) valid <= read_last_significant_bit;
+        else             valid <= 'b0;
+    end
     
     //assign valid = enable & read_last_significant_bit;
     assign data = parallel_data;
